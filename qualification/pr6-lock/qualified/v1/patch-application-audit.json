@@ -1,0 +1,58 @@
+{
+  "schemaVersion": 1,
+  "createdAtUtc": "2026-10-26T01:03:01.854244+00:00",
+  "upstreamHead": "0820278c1cd38e6dd6a1ae38631889041bd6f9ba",
+  "upstreamGitTree": "2d6666aba60dbd00d912034cc2d4def5200ceac9",
+  "sourceArchiveSha256": "2825ae99022f36f41e55574a75ea4eeb74ce4acd497f6968d4411c8c0988ca02",
+  "originalManifestSha256": "79c9a7f8742e64d89a4ad78909d01ae6d77f5f64cc798f45e7b485483ca334c4",
+  "originalSourceFilesIndependentlyMatchedBySha256AndGitBlobSha1": 4472,
+  "patch": {
+    "path": "host-lite-source-and-qualified-lock.patch",
+    "sha256": "1087156f6f14acff3790f8f3e54c0336b80ffaf73823f480f8f8056037d4ce38",
+    "bytes": 46731,
+    "format": "Git-compatible diff headers plus ordinary unified hunks; UTF-8 LF"
+  },
+  "application": {
+    "method": "Strict in-memory unified-patch application to all pristine pinned archive file bytes, matching every context/deletion byte and hunk range. No product or Git subprocess.",
+    "success": true,
+    "changedExistingFiles": 3,
+    "newFiles": 1,
+    "unchangedOriginalFiles": 4469,
+    "resultFiles": 4473,
+    "allResultFilesMatchFrozenThreeFileCandidateInventoryExceptQualifiedLock": true,
+    "gitApplyCommandExecuted": false
+  },
+  "changes": [
+    {
+      "path": "packages/host-lite/package.json",
+      "beforeSha256": "57e7ca360fe570de47eb66789089a215f8a3079085bca287f70d0abdbee133eb",
+      "afterSha256": "7623d57759c3a76e669ca51be0bcd2e36fc4f998cdd32a1e62d0abb7b8ca231e",
+      "bytes": 485
+    },
+    {
+      "path": "packages/host-lite/src/App.tsx",
+      "beforeSha256": "d80f663e81176b760f1be60f112c230067693dfbe76792116dfd7fccf877c527",
+      "afterSha256": "a8d5a444b8595ab5d71f123e6fa44b42dc3bfb8efeae0c068c471c4c1a641135",
+      "bytes": 16938
+    },
+    {
+      "path": "packages/host-lite/src/vite-env.d.ts",
+      "beforeSha256": null,
+      "afterSha256": "65996936fbb042915f7b74a200fcdde7e410f32a669b1ab9597cfaa4b0faddb5",
+      "bytes": 38
+    },
+    {
+      "path": "yarn.lock",
+      "beforeSha256": "ed1d0d4f87b2f1c6539848c0af609f7b6bfafe71e4ac4ccfa6a9c02c9c90001e",
+      "afterSha256": "7e7d3d81d902cc4af88f38cf3a43eb831eeb20861d9097b23b4859f4844e4340",
+      "bytes": 1044581
+    }
+  ],
+  "candidateLockSha256": "7e7d3d81d902cc4af88f38cf3a43eb831eeb20861d9097b23b4859f4844e4340",
+  "runtimeRunId": 40251608388,
+  "limits": [
+    "The existing App/compiler/ambient declarations plus the independently audited generated lock are the only changes.",
+    "This is data-only patch validation, not a new package install, compiler/Vite/browser/wallet/native qualification.",
+    "Original YN0066 compiler compatibility-patch and existing peer-dependency warnings remain documented in lock-audit.json."
+  ]
+}

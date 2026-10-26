@@ -1,0 +1,89 @@
+➤ YN0000: ┌ Project validation
+➤ YN0057: │ site: Resolutions field will be ignored
+➤ YN0000: └ Completed
+➤ YN0000: ┌ Resolution step
+➤ YN0002: │ @craco/craco@npm:7.1.0 [45d07] doesn't provide @types/node (pa6b63), requested by cosmiconfig-typescript-loader
+➤ YN0002: │ @craco/craco@npm:7.1.0 [45d07] doesn't provide postcss (pa8b0c), requested by autoprefixer
+➤ YN0002: │ @craco/craco@npm:7.1.0 [45d07] doesn't provide typescript (pab1fd), requested by cosmiconfig-typescript-loader
+➤ YN0002: │ @cypress/code-coverage@npm:3.10.0 [45d07] doesn't provide @babel/core (pbbcc5), requested by @cypress/webpack-preprocessor
+➤ YN0002: │ @cypress/code-coverage@npm:3.10.0 [45d07] doesn't provide @babel/preset-env (p4c8e2), requested by @cypress/webpack-preprocessor
+➤ YN0002: │ @cypress/code-coverage@npm:3.10.0 [45d07] doesn't provide babel-loader (pb20f1), requested by @cypress/webpack-preprocessor
+➤ YN0002: │ @cypress/code-coverage@npm:3.10.0 [45d07] doesn't provide webpack (p8ae46), requested by @cypress/webpack-preprocessor
+➤ YN0002: │ @devtools-ds/themes@npm:1.2.1 [ef349] doesn't provide react-dom (pf654d), requested by @design-systems/utils
+➤ YN0002: │ @metamask/permission-controller@npm:11.1.1 [0ef3d] doesn't provide @babel/runtime (pb7fad), requested by @metamask/controller-utils
+➤ YN0002: │ @metamask/permission-controller@npm:11.1.1 [c0478] doesn't provide @babel/runtime (pee15b), requested by @metamask/controller-utils
+➤ YN0002: │ @metamask/phishing-controller@npm:12.6.0 doesn't provide @babel/runtime (p15c97), requested by @metamask/controller-utils
+➤ YN0002: │ @metamask/snaps-cli@npm:6.7.0 doesn't provide typescript (p564c6), requested by fork-ts-checker-webpack-plugin
+➤ YN0002: │ @metamask/snaps-execution-environments@npm:8.2.0 doesn't provide webextension-polyfill (pebe1c), requested by @metamask/providers
+➤ YN0002: │ @metamask/snaps-rpc-methods@npm:12.4.0 doesn't provide @metamask/approval-controller (pe7960), requested by @metamask/permission-controller
+➤ YN0002: │ @metamask/snaps-sdk@npm:6.22.0 doesn't provide webextension-polyfill (p4213a), requested by @metamask/providers
+➤ YN0002: │ @metamask/snaps-sdk@npm:6.24.0 doesn't provide webextension-polyfill (p6af42), requested by @metamask/providers
+➤ YN0002: │ @metamask/snaps-sdk@npm:7.1.0 doesn't provide webextension-polyfill (pa610e), requested by @metamask/providers
+➤ YN0002: │ @metamask/snaps-simulation@npm:2.7.0 doesn't provide @metamask/approval-controller (p8be32), requested by @metamask/permission-controller
+➤ YN0002: │ @metamask/snaps-utils@npm:8.10.0 doesn't provide @metamask/approval-controller (p5bd4a), requested by @metamask/permission-controller
+➤ YN0002: │ @metamask/snaps-utils@npm:9.4.0 doesn't provide @metamask/approval-controller (p791c4), requested by @metamask/permission-controller
+➤ YN0060: │ @postfiat/pftl-snap@workspace:packages/snap provides prettier (p03d00) with version 3.8.0, which doesn't satisfy what @metamask/eslint-config requests
+➤ YN0060: │ @postfiat/pftl-snap@workspace:packages/snap provides typescript (p690fb) with version 4.9.5, which doesn't satisfy what @metamask/eslint-config-typescript requests
+➤ YN0002: │ @storybook/addon-docs@npm:6.5.16 [94a8e] doesn't provide @babel/core (p4470b), requested by @babel/preset-env
+➤ YN0002: │ @storybook/addon-docs@npm:6.5.16 [94a8e] doesn't provide @babel/core (p6eb8d), requested by babel-loader
+➤ YN0002: │ @storybook/addon-docs@npm:6.5.16 [94a8e] doesn't provide webpack (p2ee1b), requested by babel-loader
+➤ YN0002: │ @storybook/docs-tools@npm:6.5.16 doesn't provide react (p9b542), requested by @storybook/store
+➤ YN0002: │ @storybook/docs-tools@npm:6.5.16 doesn't provide react-dom (pc910b), requested by @storybook/store
+➤ YN0002: │ @storybook/instrumenter@npm:6.5.16 doesn't provide react (p00f73), requested by @storybook/addons
+➤ YN0002: │ @storybook/instrumenter@npm:6.5.16 doesn't provide react-dom (p410d1), requested by @storybook/addons
+➤ YN0002: │ @storybook/mdx1-csf@npm:0.0.1 doesn't provide @babel/core (p178e5), requested by @babel/preset-env
+➤ YN0002: │ @storybook/preset-create-react-app@npm:4.1.2 [45d07] doesn't provide react-refresh (p71e19), requested by @pmmmwh/react-refresh-webpack-plugin
+➤ YN0002: │ @storybook/preset-create-react-app@npm:4.1.2 [45d07] doesn't provide typescript (p52d52), requested by @storybook/react-docgen-typescript-plugin
+➤ YN0002: │ @storybook/preset-create-react-app@npm:4.1.2 [45d07] doesn't provide webpack (p074bb), requested by @pmmmwh/react-refresh-webpack-plugin
+➤ YN0002: │ @storybook/preset-create-react-app@npm:4.1.2 [45d07] doesn't provide webpack (p6c412), requested by @storybook/react-docgen-typescript-plugin
+➤ YN0002: │ @storybook/telemetry@npm:6.5.16 doesn't provide react (p48f29), requested by @storybook/core-common
+➤ YN0002: │ @storybook/telemetry@npm:6.5.16 doesn't provide react-dom (p479a1), requested by @storybook/core-common
+➤ YN0002: │ eslint-config-react-app@npm:7.0.1 [3d5e3] doesn't provide @babel/plugin-syntax-flow (pace73), requested by eslint-plugin-flowtype
+➤ YN0002: │ eslint-config-react-app@npm:7.0.1 [3d5e3] doesn't provide @babel/plugin-transform-react-jsx (pcdf2c), requested by eslint-plugin-flowtype
+➤ YN0002: │ react-dev-utils@npm:12.0.1 doesn't provide typescript (p9c21e), requested by fork-ts-checker-webpack-plugin
+➤ YN0002: │ react-dev-utils@npm:12.0.1 doesn't provide webpack (p882e9), requested by fork-ts-checker-webpack-plugin
+➤ YN0060: │ root@workspace:. provides eslint-plugin-prettier (p715e1) with version 5.5.5, which doesn't satisfy what @metamask/eslint-config requests
+➤ YN0060: │ root@workspace:. provides prettier (p07114) with version 3.8.0, which doesn't satisfy what @metamask/eslint-config requests
+➤ YN0060: │ root@workspace:. provides typescript (p16125) with version 4.9.5, which doesn't satisfy what @metamask/eslint-config-typescript requests
+➤ YN0002: │ site@workspace:packages/site doesn't provide @babel/core (p2f0f8), requested by @babel/preset-env
+➤ YN0002: │ site@workspace:packages/site doesn't provide @babel/core (pf65b5), requested by @babel/preset-react
+➤ YN0002: │ site@workspace:packages/site doesn't provide @babel/core (p29a1a), requested by @babel/plugin-proposal-class-properties
+➤ YN0002: │ site@workspace:packages/site doesn't provide @babel/core (p63cae), requested by @babel/plugin-proposal-decorators
+➤ YN0002: │ site@workspace:packages/site doesn't provide @babel/core (p95c4c), requested by @babel/plugin-transform-runtime
+➤ YN0002: │ site@workspace:packages/site doesn't provide @babel/core (p75940), requested by @babel/preset-typescript
+➤ YN0002: │ site@workspace:packages/site doesn't provide @babel/core (pbf966), requested by @storybook/addon-essentials
+➤ YN0002: │ site@workspace:packages/site doesn't provide @babel/core (pe9637), requested by @storybook/preset-create-react-app
+➤ YN0002: │ site@workspace:packages/site doesn't provide @babel/core (pabc58), requested by babel-jest
+➤ YN0002: │ site@workspace:packages/site doesn't provide cypress (p6ddf2), requested by @cypress/code-coverage
+➤ YN0002: │ site@workspace:packages/site doesn't provide cypress (p65f46), requested by @testing-library/cypress
+➤ YN0060: │ site@workspace:packages/site provides react (p5c2f5) with version 18.3.1, which doesn't satisfy what @storybook/addon-actions and some of its descendants request
+➤ YN0060: │ site@workspace:packages/site provides react (p1a099) with version 18.3.1, which doesn't satisfy what @storybook/addon-essentials and some of its descendants request
+➤ YN0060: │ site@workspace:packages/site provides react (p6add7) with version 18.3.1, which doesn't satisfy what @storybook/react and some of its descendants request
+➤ YN0060: │ site@workspace:packages/site provides react-dom (p42340) with version 18.3.1, which doesn't satisfy what @storybook/react and some of its descendants request
+➤ YN0002: │ site@workspace:packages/site doesn't provide react-is (pf192c), requested by styled-components
+➤ YN0002: │ site@workspace:packages/site doesn't provide require-from-string (p2abc2), requested by @storybook/react
+➤ YN0060: │ site@workspace:packages/site provides typescript (pc56a4) with version 4.9.5, which doesn't satisfy what @metamask/eslint-config-typescript requests
+➤ YN0060: │ site@workspace:packages/site provides typescript (p5e280) with version 4.9.5, which doesn't satisfy what @swisstype/essential requests
+➤ YN0060: │ site@workspace:packages/site provides typescript (p16f76) with version 4.9.5, which doesn't satisfy what @swisstype/react requests
+➤ YN0060: │ site@workspace:packages/site provides typescript (pf0f9b) with version 4.9.5, which doesn't satisfy what @swisstype/string requests
+➤ YN0002: │ site@workspace:packages/site doesn't provide webextension-polyfill (pd80ef), requested by @metamask/providers
+➤ YN0000: │ Some peer dependencies are incorrectly met; run yarn explain peer-requirements <hash> for details, where <hash> is the six-letter p-prefixed code
+➤ YN0000: └ Completed in 1s 477ms
+➤ YN0000: ┌ Fetch step
+➤ YN0013: │ 2753 packages were already cached
+➤ YN0000: └ Completed in 0s 704ms
+➤ YN0000: ┌ Link step
+➤ YN0004: │ @lavamoat/preinstall-always-fail@npm:2.1.1 lists build scripts, but all build scripts have been disabled.
+➤ YN0004: │ sharp@npm:0.32.6 lists build scripts, but all build scripts have been disabled.
+➤ YN0004: │ esbuild@npm:0.21.5 lists build scripts, but all build scripts have been disabled.
+➤ YN0004: │ core-js@npm:3.47.0 lists build scripts, but all build scripts have been disabled.
+➤ YN0004: │ @swc/core@npm:1.3.78 [a7a8d] lists build scripts, but all build scripts have been disabled.
+➤ YN0004: │ tiny-secp256k1@npm:1.1.7 lists build scripts, but all build scripts have been disabled.
+➤ YN0004: │ core-js-pure@npm:3.47.0 lists build scripts, but all build scripts have been disabled.
+➤ YN0000: └ Completed in 0s 842ms
+running lifecycle scripts for event "preinstall"
+running lifecycle scripts for event "install"
+- sharp
+running lifecycle scripts for event "postinstall"
+running lifecycle scripts for top level package
+➤ YN0000: Done with warnings in 4s 656ms

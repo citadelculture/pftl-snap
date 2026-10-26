@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "sourceRepository": "postfiatorg/pftl-snap",
+  "sourcePullRequest": 6,
+  "sourceHead": "0820278c1cd38e6dd6a1ae38631889041bd6f9ba",
+  "controlCommit": "f4cf957ce33f5bafb7cab2e4a5af75bbb851476c",
+  "controlUrl": "https://github.com/citadelculture/pftl-snap/tree/f4cf957ce33f5bafb7cab2e4a5af75bbb851476c/qualification/pr6-lock",
+  "runUrl": "https://github.com/citadelculture/pftl-snap/actions/runs/40251608388",
+  "runId": 40251608388,
+  "runAttempt": 1,
+  "workflowId": 396515474,
+  "artifactId": 12621480446,
+  "artifactSha256": "af5f6b7f8655e26ecafe088b89791630715dc7e17dd5f4771189f0b7bbb842e6",
+  "artifactGithubDigestVerified": true,
+  "finishedAtUtc": "2026-10-26T00:57:22.066244+00:00",
+  "candidateLockSha256": "7e7d3d81d902cc4af88f38cf3a43eb831eeb20861d9097b23b4859f4844e4340",
+  "originalResultSha256": "dad90af019cc281f379d6f2ebec3efd000e21ad990527c7831ff887c0de0d607",
+  "transformations": [
+    "install-result.json omits only the ephemeral Docker daemon UUID; all other result values are preserved.",
+    "Zero-length stderr is represented explicitly as base64 JSON.",
+    "The lock and both stdout logs are byte-identical to the verified hosted artifact."
+  ],
+  "tasknodeAllocated": false,
+  "rewardClaim": false,
+  "maintainerAdoptionClaim": false,
+  "nativeLoadOrBuildClaim": false
+}

@@ -1,0 +1,141 @@
+{
+  "schemaVersion": 1,
+  "auditedAtUtc": "2026-10-26T01:01:59.624690+00:00",
+  "scope": "Independent data-only audit of recorded original-hook lock generation and immutable installation",
+  "independentDataAuditPassed": true,
+  "runId": 40251608388,
+  "runUrl": "https://github.com/citadelculture/pftl-snap/actions/runs/40251608388",
+  "runtimeCommit": "f4cf957ce33f5bafb7cab2e4a5af75bbb851476c",
+  "artifactSha256": "af5f6b7f8655e26ecafe088b89791630715dc7e17dd5f4771189f0b7bbb842e6",
+  "artifactFilesVerified": 23,
+  "runtimePublicFilesVerified": 22,
+  "lockCheckRecomputed": {
+    "originalDescriptors": 3757,
+    "candidateDescriptors": 3846,
+    "originalResolutionsAndChecksumsPreserved": true
+  },
+  "allOriginalVersionResolutionChecksumTriplesUnchanged": true,
+  "protectedWorkspaceBodies": [
+    {
+      "descriptor": "root@workspace:.",
+      "bodySha256": "27f4d31c3a335b815f6ba5f6b41363c40ae203896af031a609ab70646c06639d",
+      "bodyUnchanged": true
+    },
+    {
+      "descriptor": "site@workspace:packages/site",
+      "bodySha256": "30b7b2c36c5395e3c33c938a4b8b0e6bd766e986738c0098fb5ef1564a787505",
+      "bodyUnchanged": true
+    },
+    {
+      "descriptor": "@postfiat/pftl-snap@workspace:packages/snap",
+      "bodySha256": "50651847ed5b25b8f171dc0de0a48302f40019c83287db3d29261bbdc07e71f2",
+      "bodyUnchanged": true
+    }
+  ],
+  "originalEntryBodyChanges": [],
+  "addedDescriptorCount": 89,
+  "unchangedOriginalSourceAndPolicies": [
+    {
+      "path": "package.json",
+      "sha256": "594118c29a75afe4c818b702660a3ea66e862072d132827836d908d047ceb7cf",
+      "preparedBytesEqualPinnedOriginal": true
+    },
+    {
+      "path": "packages/site/package.json",
+      "sha256": "72e4d0b2de0369782b895821f7746a2ea72282bc254e6077e1a849180053d403",
+      "preparedBytesEqualPinnedOriginal": true
+    },
+    {
+      "path": "packages/snap/package.json",
+      "sha256": "f3d7d9c1a4a18dd8a1228d6f862857655f2d397ed181c233bf5d9f5e726bcdbe",
+      "preparedBytesEqualPinnedOriginal": true
+    },
+    {
+      "path": ".yarnrc.yml",
+      "sha256": "84cbf4ee32d72e6d6d27307c5ea031a4a48dfa57038ac575f48be8e2c58c55d8",
+      "preparedBytesEqualPinnedOriginal": true
+    },
+    {
+      "path": ".yarn/releases/yarn-3.2.1.cjs",
+      "sha256": "f1c9f039ab3b236c7abb7bafa0a0f266aa6bc5a3dbe7c684b561f03c0005d043",
+      "preparedBytesEqualPinnedOriginal": true
+    },
+    {
+      "path": ".yarn/plugins/@yarnpkg/plugin-allow-scripts.cjs",
+      "sha256": "e0f359ae1c40e0f72996f5960735931216baeeed753dfe28bf47b84f8983840a",
+      "preparedBytesEqualPinnedOriginal": true
+    }
+  ],
+  "phases": [
+    {
+      "phase": "generate",
+      "exitCode": 0,
+      "logHashesVerified": true,
+      "originalHookLifecycleLines": [
+        "running lifecycle scripts for event \"preinstall\"",
+        "running lifecycle scripts for event \"install\"",
+        "- sharp",
+        "running lifecycle scripts for event \"postinstall\"",
+        "running lifecycle scripts for top level package"
+      ],
+      "preservedWarnings": [
+        "\u27a4 YN0057: \u2502 site: Resolutions field will be ignored",
+        "\u27a4 YN0066: \u2502 typescript@patch:typescript@npm%3A5.0.4#~builtin<compat/typescript>::version=5.0.4&hash=7ad353: Cannot apply hunk #1",
+        "\u27a4 YN0066: \u2502 typescript@patch:typescript@npm%3A4.9.5#~builtin<compat/typescript>::version=4.9.5&hash=7ad353: Cannot apply hunk #6",
+        "\u27a4 YN0004: \u2502 @lavamoat/preinstall-always-fail@npm:2.1.1 lists build scripts, but all build scripts have been disabled.",
+        "\u27a4 YN0004: \u2502 sharp@npm:0.32.6 lists build scripts, but all build scripts have been disabled.",
+        "\u27a4 YN0004: \u2502 esbuild@npm:0.21.5 lists build scripts, but all build scripts have been disabled.",
+        "\u27a4 YN0004: \u2502 core-js@npm:3.47.0 lists build scripts, but all build scripts have been disabled.",
+        "\u27a4 YN0004: \u2502 @swc/core@npm:1.3.78 [a7a8d] lists build scripts, but all build scripts have been disabled.",
+        "\u27a4 YN0004: \u2502 tiny-secp256k1@npm:1.1.7 lists build scripts, but all build scripts have been disabled.",
+        "\u27a4 YN0004: \u2502 core-js-pure@npm:3.47.0 lists build scripts, but all build scripts have been disabled."
+      ],
+      "recordedBoundaryIdentityAndPolicyHashesConsistent": true,
+      "policyObservedAtUtc": "2026-10-26T00:54:57.094218Z",
+      "policyExpiresAtUtc": "2026-10-26T01:14:57.094218Z",
+      "filterOutputDropCounter": {
+        "packets": 0,
+        "bytes": 0
+      }
+    },
+    {
+      "phase": "immutable",
+      "exitCode": 0,
+      "logHashesVerified": true,
+      "originalHookLifecycleLines": [
+        "running lifecycle scripts for event \"preinstall\"",
+        "running lifecycle scripts for event \"install\"",
+        "- sharp",
+        "running lifecycle scripts for event \"postinstall\"",
+        "running lifecycle scripts for top level package"
+      ],
+      "preservedWarnings": [
+        "\u27a4 YN0057: \u2502 site: Resolutions field will be ignored",
+        "\u27a4 YN0004: \u2502 @lavamoat/preinstall-always-fail@npm:2.1.1 lists build scripts, but all build scripts have been disabled.",
+        "\u27a4 YN0004: \u2502 sharp@npm:0.32.6 lists build scripts, but all build scripts have been disabled.",
+        "\u27a4 YN0004: \u2502 esbuild@npm:0.21.5 lists build scripts, but all build scripts have been disabled.",
+        "\u27a4 YN0004: \u2502 core-js@npm:3.47.0 lists build scripts, but all build scripts have been disabled.",
+        "\u27a4 YN0004: \u2502 @swc/core@npm:1.3.78 [a7a8d] lists build scripts, but all build scripts have been disabled.",
+        "\u27a4 YN0004: \u2502 tiny-secp256k1@npm:1.1.7 lists build scripts, but all build scripts have been disabled.",
+        "\u27a4 YN0004: \u2502 core-js-pure@npm:3.47.0 lists build scripts, but all build scripts have been disabled."
+      ],
+      "recordedBoundaryIdentityAndPolicyHashesConsistent": true,
+      "policyObservedAtUtc": "2026-10-26T00:56:58.468384Z",
+      "policyExpiresAtUtc": "2026-10-26T01:16:58.468384Z",
+      "filterOutputDropCounter": {
+        "packets": 0,
+        "bytes": 0
+      }
+    }
+  ],
+  "qualification": "The exact final lock passes the original descriptor/resolution/checksum and protected workspace preservation contract, and both recorded original-hook install phases completed successfully.",
+  "limits": [
+    "Only one final candidate lock artifact exists; generate-to-immutable identity was enforced by the pinned controller and is not a comparison of two independently retained phase snapshots.",
+    "Live source integrity, linked install state and owned-container cleanup are controller-enforced recorded facts, not independently reobserved processes/files in this audit.",
+    "Both logs show the unchanged allow-scripts lifecycle selecting sharp; no native Sharp load test or binary-load success is inferred.",
+    "Generate preserves YN0066 TypeScript compatibility-patch warnings for 5.0.4 and 4.9.5, plus existing peer dependency warnings. Neither compiler nor Vite execution was qualified by this install run.",
+    "No product/browser/provider/wallet/signing/transfer test, new runtime, reinstall, package execution or external write occurred in this audit."
+  ],
+  "originalAuditSha256": "a79aa315bbb33539ee6d59136148e5beb8615486d29935cf9f9ffd116e60e17b",
+  "normalization": "Selected evidence fields from the original data audit; local file paths and verbose dependency listing omitted. No result altered."
+}

@@ -1,0 +1,101 @@
+{
+  "qualified": true,
+  "phases": [
+    {
+      "phase": "generate",
+      "exitCode": 0,
+      "oomKilled": false,
+      "runningAfter": false,
+      "stopReason": null,
+      "stdoutSha256": "25f63cb8ad9dd20719a8262a8cdd44682504eb3f18a0a5e7fb2f33275da39af4",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "phase": "immutable",
+      "exitCode": 0,
+      "oomKilled": false,
+      "runningAfter": false,
+      "stopReason": null,
+      "stdoutSha256": "b2e3192235e3d9ecdc25b42a87e3de32b10c1f855e5330f20c2b7cac024e8f72",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "cleanupVerified": true,
+  "hookOrPolicyModified": false,
+  "mode": "full-install",
+  "boundaryRuntimeQualified": true,
+  "installExecuted": true,
+  "qualificationScope": "Candidate lock plus actual immutable original-hook install only",
+  "limits": "Lock/install evidence only; not a Sharp native-load, Vite/product, wallet, or transaction test.",
+  "actualBoundaryProof": {
+    "boundaryReportSha256": "2c37e44a462ec4ae8c82ab9d4a1ea3ac7c960aa6f21c896b2df8c9e62470c551",
+    "boundaryRunId": 40248703034,
+    "boundaryRunAttempt": 1,
+    "boundaryCommit": "c1e3f4f52f286ab0133e56b472a975cfde8cb9d1",
+    "recordedProbesRecomputed": 13,
+    "actualTrafficReexecuted": false,
+    "readbackRepresentation": "typed-payload-protocol-canonical",
+    "image": "node@sha256:51b1100cc2a83d370c6a60952e3f2989c8a43159d0e38586e090f3b3326efefd",
+    "helpers": {
+      "egress_policy.py": "082262d5c3dd69a9411978225e94212ac83049f01417649dc92ca4cbdf0fad9c",
+      "namespace_filter.py": "139e87b4851ed8e18e09c29fa4b499f397c6d5b7a91a0a04e6420593a699be3e"
+    },
+    "rootSourceHead": "0820278c1cd38e6dd6a1ae38631889041bd6f9ba",
+    "rootPayloadManifestSha256": "2b34bd97b9610342d294e00d30a4ecbe131528c17449a9679c1b1cd3ec2a6545"
+  },
+  "phaseReleaseProofs": [
+    {
+      "phase": "generate",
+      "boundaryReportSha256": "2c37e44a462ec4ae8c82ab9d4a1ea3ac7c960aa6f21c896b2df8c9e62470c551",
+      "boundaryRunId": 40248703034,
+      "boundaryRunAttempt": 1,
+      "boundaryCommit": "c1e3f4f52f286ab0133e56b472a975cfde8cb9d1",
+      "recordedProbesRecomputed": 13,
+      "actualTrafficReexecuted": false,
+      "readbackRepresentation": "typed-payload-protocol-canonical",
+      "image": "node@sha256:51b1100cc2a83d370c6a60952e3f2989c8a43159d0e38586e090f3b3326efefd",
+      "helpers": {
+        "egress_policy.py": "082262d5c3dd69a9411978225e94212ac83049f01417649dc92ca4cbdf0fad9c",
+        "namespace_filter.py": "139e87b4851ed8e18e09c29fa4b499f397c6d5b7a91a0a04e6420593a699be3e"
+      },
+      "rootSourceHead": "0820278c1cd38e6dd6a1ae38631889041bd6f9ba",
+      "rootPayloadManifestSha256": "2b34bd97b9610342d294e00d30a4ecbe131528c17449a9679c1b1cd3ec2a6545"
+    },
+    {
+      "phase": "immutable",
+      "boundaryReportSha256": "2c37e44a462ec4ae8c82ab9d4a1ea3ac7c960aa6f21c896b2df8c9e62470c551",
+      "boundaryRunId": 40248703034,
+      "boundaryRunAttempt": 1,
+      "boundaryCommit": "c1e3f4f52f286ab0133e56b472a975cfde8cb9d1",
+      "recordedProbesRecomputed": 13,
+      "actualTrafficReexecuted": false,
+      "readbackRepresentation": "typed-payload-protocol-canonical",
+      "image": "node@sha256:51b1100cc2a83d370c6a60952e3f2989c8a43159d0e38586e090f3b3326efefd",
+      "helpers": {
+        "egress_policy.py": "082262d5c3dd69a9411978225e94212ac83049f01417649dc92ca4cbdf0fad9c",
+        "namespace_filter.py": "139e87b4851ed8e18e09c29fa4b499f397c6d5b7a91a0a04e6420593a699be3e"
+      },
+      "rootSourceHead": "0820278c1cd38e6dd6a1ae38631889041bd6f9ba",
+      "rootPayloadManifestSha256": "2b34bd97b9610342d294e00d30a4ecbe131528c17449a9679c1b1cd3ec2a6545"
+    }
+  ],
+  "lockValidation": {
+    "originalDescriptors": 3757,
+    "candidateDescriptors": 3846,
+    "originalResolutionsAndChecksumsPreserved": true
+  },
+  "candidateLockSha256": "7e7d3d81d902cc4af88f38cf3a43eb831eeb20861d9097b23b4859f4844e4340",
+  "hostHomeUnchanged": true,
+  "cleanupErrors": [],
+  "finishedAtUtc": "2026-10-26T00:57:22.066244+00:00",
+  "dockerDaemon": {
+    "path": "/usr/bin/docker",
+    "sha256": "6435ff9214bf8e0931078fb0980809728cac0a54a526d4f28a26d3e48132b58d",
+    "endpoint": "unix:///run/docker.sock",
+    "nativeLinux": true,
+    "rootless": false,
+    "localRootfulDaemon": true,
+    "builtinSeccomp": true,
+    "runnerDockerConfigRead": false
+  }
+}
