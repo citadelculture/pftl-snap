@@ -17,22 +17,27 @@
       "sha256": "65996936fbb042915f7b74a200fcdde7e410f32a669b1ab9597cfaa4b0faddb5"
     },
     {
+      "path": "candidate/yarn.lock",
+      "bytes": 1044581,
+      "sha256": "7e7d3d81d902cc4af88f38cf3a43eb831eeb20861d9097b23b4859f4844e4340"
+    },
+    {
       "path": "candidate.patch",
-      "bytes": 9084,
-      "sha256": "2bb4001b1866f75e403463d354af5c9eee6db6c8d349d4299df7638ebe3a01f8"
+      "bytes": 46731,
+      "sha256": "1087156f6f14acff3790f8f3e54c0336b80ffaf73823f480f8f8056037d4ce38"
     },
     {
       "path": "frozen-candidate-files.json",
       "bytes": 978978,
-      "sha256": "e62a6f3a3b5b34af333d6b8a20043e8cd902ead4fe80aa00ffa94ebc9ae4b5e0"
+      "sha256": "6dfa6d326a36987e6a84ed2205957c1a8c756e11c2693ca4c1b49867e59eda45"
     },
     {
       "path": "provenance.json",
-      "bytes": 1564,
-      "sha256": "a9e8b66fd4eb7cca370d05937585f68bb6601fb2d36d428e851ec0f1228ca006"
+      "bytes": 1640,
+      "sha256": "5fcac5fea337ffade9722cd5ab896bb472ee9d0074dcd10eea55746de7180f12"
     }
   ],
   "sourceHead": "0820278c1cd38e6dd6a1ae38631889041bd6f9ba",
-  "sourceInventorySha256": "e62a6f3a3b5b34af333d6b8a20043e8cd902ead4fe80aa00ffa94ebc9ae4b5e0",
+  "sourceInventorySha256": "6dfa6d326a36987e6a84ed2205957c1a8c756e11c2693ca4c1b49867e59eda45",
   "publicSafety": "Exact public-source candidate bytes and relative paths/hashes only; no owner paths, environment values, credentials, private logs or operator data."
 }

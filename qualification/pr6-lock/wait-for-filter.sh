@@ -3,7 +3,7 @@
 set -eu
 phase=$1
 nonce=$2
-case "$phase" in boundary|generate|immutable) ;; *) exit 70 ;; esac
+case "$phase" in immutable|compiler-identity|typecheck|production-build) ;; *) exit 70 ;; esac
 case "$nonce" in ''|*[!0-9a-f]*) exit 71 ;; esac
 tries=0
 while [ "$tries" -lt 600 ]; do

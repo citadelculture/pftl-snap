@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "repository": "citadelculture/pftl-snap",
+  "runId": 40251608388,
+  "headSha": "f4cf957ce33f5bafb7cab2e4a5af75bbb851476c",
+  "workflowPath": ".github/workflows/pr6-original-hook-install.yml",
+  "status": "completed",
+  "conclusion": "success",
+  "runAttempt": 1,
+  "artifactDigest": "sha256:af5f6b7f8655e26ecafe088b89791630715dc7e17dd5f4771189f0b7bbb842e6",
+  "resultSha256": "dad90af019cc281f379d6f2ebec3efd000e21ad990527c7831ff887c0de0d607",
+  "candidateLockSha256": "7e7d3d81d902cc4af88f38cf3a43eb831eeb20861d9097b23b4859f4844e4340",
+  "completedAtUtc": "2026-10-26T00:57:25Z",
+  "controllerSha256": "c37d8e40b694a4cd91f06d99aec5da79637fb0f75a320494499ae3caef8d021b"
+}

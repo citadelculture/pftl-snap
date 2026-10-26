@@ -22,8 +22,13 @@
       "path": "packages/host-lite/src/vite-env.d.ts",
       "beforeSha256": null,
       "afterSha256": "65996936fbb042915f7b74a200fcdde7e410f32a669b1ab9597cfaa4b0faddb5"
+    },
+    {
+      "path": "yarn.lock",
+      "beforeSha256": "ed1d0d4f87b2f1c6539848c0af609f7b6bfafe71e4ac4ccfa6a9c02c9c90001e",
+      "afterSha256": "7e7d3d81d902cc4af88f38cf3a43eb831eeb20861d9097b23b4859f4844e4340"
     }
   ],
-  "scope": "Three previously qualified host-lite corrections only: App wallet/account revalidation, TypeScript5.0.4 exact pin and actual Vite client ambient types. Original root/site/snap configs, original Yarn3.2.1 hook and original lock remain unchanged.",
-  "qualificationLimit": "This packet does not claim lock generation, original-hook immutable install, native Sharp, Vite/product build or on-chain behavior success."
+  "scope": "Three previously qualified source corrections plus exact original-hook generated and immutable-installed lock from run40251608388.",
+  "qualificationLimit": "Lock/install plus earlier focused source tests qualified; actual locked compiler/Vite build remains unexecuted."
 }

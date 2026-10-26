@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "operation": "locked-host-lite-compiler-build",
+  "executionAdmitted": true,
+  "repository": "citadelculture/pftl-snap",
+  "sourceHead": "0820278c1cd38e6dd6a1ae38631889041bd6f9ba",
+  "payloadManifestSha256": "534290266513aee886e459f741e06fc9bed5da6cf0b133bb88138137775977e8",
+  "candidateLockSha256": "7e7d3d81d902cc4af88f38cf3a43eb831eeb20861d9097b23b4859f4844e4340",
+  "image": "node@sha256:51b1100cc2a83d370c6a60952e3f2989c8a43159d0e38586e090f3b3326efefd",
+  "boundaryReportSha256": "2c37e44a462ec4ae8c82ab9d4a1ea3ac7c960aa6f21c896b2df8c9e62470c551",
+  "boundaryProvenanceSha256": "7899bff951e85da32641cad5b116f64c9ce66b260f74353bf7e4cf4b154d36a7",
+  "successfulInstallResultSha256": "dad90af019cc281f379d6f2ebec3efd000e21ad990527c7831ff887c0de0d607",
+  "successfulInstallProvenanceSha256": "f987ff88c464eace566a8c2a1c2c3a656500d94f73506c468cd2161e0a5fad09",
+  "allowedPhases": [
+    "immutable",
+    "compiler-identity",
+    "typecheck",
+    "production-build"
+  ],
+  "originalHookRequired": true,
+  "rootPoliciesUnchanged": true,
+  "buildNativeEffectsReviewed": true,
+  "expiresAtUtc": "2026-10-26T02:31:00Z"
+}

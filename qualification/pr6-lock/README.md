@@ -1,17 +1,72 @@
-# Bounded original-hook lock qualification
+# Locked host-lite compiler and production build: finite runtime candidate
 
-This runtime candidate binds the reviewed source and actual confinement proof to one expiring install admission. Publication alone does not execute it. Dispatch requires a separate normal-reviewed operation on the owned manual workflow; no install success is claimed in advance.
+This packet has not executed. It derives from independently reviewed closed
+preparation v2, with only runtime gates, this description and a separate exact
+build admission changed. The manual owned-fork workflow and controller gates are
+open for normal review of one execution; source preparation alone does not
+publish or dispatch it. admission/build-admission.json expires at
+2026-10-26T02:31:00Z and is hash-bound in the workflow and revalidated before every
+phase and immediately before package release. The expired install admission is
+omitted. Root retains publication, dispatch, approval and result reconciliation.
 
-The exact source is postfiatorg/pftl-snap at `0820278c1cd38e6dd6a1ae38631889041bd6f9ba`, plus the three frozen host-lite correction files in the payload. The 4473-file candidate inventory, original root hook, LavaMoat policies, Yarn3.2.1 and original lock input remain pinned. Generation uses `install --no-immutable`; verification uses `install --immutable`. Both must really complete with actual linker state, unchanged protected resolutions/checksums and identical candidate lock bytes in the second phase.
+The source is upstream 0820278c1cd38e6dd6a1ae38631889041bd6f9ba with four exact
+changes: the previously qualified Snap-selection fix, TypeScript 5.0.4 pin,
+Vite ambient declaration, and the lock generated and immutable-installed by
+successful run 40251608388. The lock SHA256 is
+7e7d3d81d902cc4af88f38cf3a43eb831eeb20861d9097b23b4859f4844e4340.
+All 3,757 old lock entry bodies are unchanged; 89 descriptors were added.
 
-Boundary run40248703034 at `c1e3f4f52f286ab0133e56b472a975cfde8cb9d1` completed successfully at2026-10-26T00:18:57Z. Its exact report/provenance are included: one public TCP443 connection and twelve negative counter-backed probes passed, with final filter and complete cleanup. The proof validator recomputes all13 records. This is historical confinement evidence, not an install result or a fresh endpoint observation.
+Original root hooks and policies remain unchanged. The new inventory freezes the
+qualified lock. The separate build admission binds this four-file payload, while
+unchanged network helpers retain the historical boundary's original source and
+payload identity. Both historical boundary proof and successful install proof
+are hash-bound and checked; neither authorizes build execution by itself.
 
-Each install phase gets a new fixed-host endpoint policy and protected host-tool identities. Exact numeric nft readback, default-deny IPv4/IPv6, literal public TCP443 endpoints, DNS refusal and local/gateway exclusions remain enforced before the package gate opens. No in-phase policy widening or renewal occurs. Shared CDN addresses do not provide HTTPS-origin isolation.
+The finite phase order is immutable install, compiler identity, typecheck, then
+production build. The old runner volume was cleaned; a new owned volume needs
+an actual immutable installation. No resolution/generate phase, hook shim or
+lifecycle-policy override is included.
 
-The pinned Node24.21.0 Linux image runs as its real node uid1000, with an owned home volume, read-only root, private namespaces, all capabilities dropped, no-new-privileges and builtin seccomp. No credentials, service environment, host home, Git metadata or Docker socket enter the package container. Inherited control values remain exact; incompatible controls refuse. Docker ELF/path/hash identity is rechecked before each operation.
+Compiler phases run through Yarn's host-lite workspace environment:
 
-Only the reviewed conditional host nftables package step may prepare the runner. No child compiler, Python, package policy exception or modified hook is provisioned. Original policy-permitted Sharp libvips/addon download or compilation fallback may occur and may fail honestly. Native-load, Vite/product, wallet, signing and transfer results are outside this qualification.
+    node .yarn/releases/yarn-3.2.1.cjs workspace @postfiat/pftl-host-lite exec node /lane/locked-compiler.cjs compiler-identity
+    node .yarn/releases/yarn-3.2.1.cjs workspace @postfiat/pftl-host-lite exec node /lane/locked-compiler.cjs typecheck
 
-Limits:900seconds per phase,4GiB memory,2CPUs,256PIDs,8GiB initial free space and4GiB reserve,16MiB output per phase,40-minute job. Exact owned containers, labeled home volume and copied source are removed; captured evidence is retained. Missing source/tool/expiry/resource/cleanup evidence fails qualification. The exact admission below is checked before preparation and again immediately before atomic gate release, with enough remaining lifetime for the whole phase plus cleanup.
+This explicitly refines the initial exec-tsc contract to record provenance.
+The guard resolves the workspace TypeScript 5.0.4 package directly, requires its
+actual bin mapping to be {tsc: "./bin/tsc"}, and binds that package's bin/tsc.
+Yarn 3.2.1 creates regular temporary shell shims and prepends their directory to
+PATH; the guard deliberately does not select, equate or execute that shim.
+It records relative real paths and SHA256 of package.json, bin/tsc, lib/tsc.js
+and lib/typescript.js, then invokes the exact direct CLI with --version or
+--noEmit --project tsconfig.json. Files are compared again after execution;
+identity and typecheck bindings must match. A printed version alone cannot pass.
+No package is imported by the provenance guard.
 
-The first install attempt failed before package execution because the unprivileged controller could not stat its owned gate process network namespace. This revision uses one SHA-pinned, isolated stdlib helper solely to read and bind PID/nonce/UID/start-time/namespace identity with a held read-only FD. It does not enter the namespace or execute payloads. The controller stays unprivileged; the existing privileged filter installer and all proof, expiry, source and release checks remain unchanged. No recovered runtime or install success is claimed by this preparation.
+The final command invokes the unchanged workspace build script, vite build.
+It introduces real esbuild 0.21.5 executable and Rollup 4.65.0 Linux addon use.
+That native build scope is explicitly included in this separate finite admission.
+No compiler/Python provisioning or disabled-script enablement is included.
+Earlier YN0066 TypeScript compatibility-patch and peer warnings remain limits
+until actual compiler/build outcomes are available.
+
+The controller preserves local Docker/tool identities, genuine container HOME
+and UID 1000, empty capabilities, seccomp/no-new-privileges, inherited controls,
+credential exclusions, read-only control mounts, nonce-bound read-only namespace
+identity inspection, installed/read-back filtering, fresh per-phase endpoints,
+admission expiry rechecks immediately before atomic release, resources and owned
+cleanup. Inspector and trusted wait gate extend only explicit phase labels.
+
+All frozen source and lock bytes and modes are checked after each phase. Only
+the final phase may create packages/host-lite/dist. Its regular nonempty files
+are bounded to 256 files, 8 MiB each, 32 MiB total, hashed and copied to evidence.
+The index must reference a local module script; each direct script/link reference
+must resolve to a retained nonempty asset within dist. Symlinks, external URLs
+and traversal are rejected. These are entry-reference and integrity checks;
+no bundle is executed and dynamic browser imports are not qualified.
+
+Next: normal review of this exact public inventory, followed by separately
+controlled publication and one manual dispatch before admission expiry. No
+publication, dispatch, compiler/build or package execution occurred in preparing
+this packet or its pure tests. Browser/provider/wallet/signing and transaction
+execution remain outside this workload.

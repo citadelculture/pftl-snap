@@ -21,7 +21,7 @@ def read_limited(path, limit):
 
 def request_valid(pid, phase, nonce):
     if (type(pid) is not int or not 1 < pid < 2**31
-            or phase not in ("generate", "immutable")
+            or phase not in ("immutable", "compiler-identity", "typecheck", "production-build")
             or not isinstance(nonce, str) or not re.fullmatch(r"[0-9a-f]{32}", nonce)):
         raise ValueError("Exact owned gate PID, phase and nonce required")
 
@@ -75,7 +75,7 @@ def inspect_gate(pid, phase, nonce, *, read=read_limited, effective_uid=os.geteu
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--pid", required=True, type=int)
-    parser.add_argument("--phase", required=True, choices=("generate", "immutable"))
+    parser.add_argument("--phase", required=True, choices=("immutable", "compiler-identity", "typecheck", "production-build"))
     parser.add_argument("--nonce", required=True)
     args = parser.parse_args()
     print(json.dumps(inspect_gate(args.pid, args.phase, args.nonce), sort_keys=True))
