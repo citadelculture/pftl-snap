@@ -1,0 +1,57 @@
+{
+  "schemaVersion": 1,
+  "sourceRepository": "postfiatorg/pftl-snap",
+  "sourcePull": 6,
+  "sourceHead": "0820278c1cd38e6dd6a1ae38631889041bd6f9ba",
+  "runtimeRepository": "citadelculture/pftl-snap",
+  "runtimeHead": "b64678eccf02575b625bde37d0b8f5f828afc401",
+  "runId": 40256371211,
+  "runAttempt": 1,
+  "workflowPath": ".github/workflows/pr6-host-lite-locked-build.yml",
+  "status": "completed",
+  "conclusion": "failure",
+  "artifactId": 12622667063,
+  "artifactSha256": "22ed336dfad03e546404d1909f0343db21872dfbf9feb65263c5d4ad32313f67",
+  "originalResultSha256": "b150dadb0115bba48b3bdfd55ddd304bb6fd60e0dfda325177bc9dff765768a0",
+  "publicResultSha256": "93804f8c8c86e8b1d9761cc178d24cf3eec9314b922bcbe56a61bca378baa8c4",
+  "normalization": {
+    "removedFields": [
+      "dockerDaemon.daemonId"
+    ],
+    "reason": "Omit ephemeral hosted-runner daemon identifier; all qualification outcomes, failures, compiler hashes and controls retained."
+  },
+  "candidateLockSha256": "7e7d3d81d902cc4af88f38cf3a43eb831eeb20861d9097b23b4859f4844e4340",
+  "qualifiedScopes": [
+    "immutable install with original hook and unchanged root policy",
+    "direct workspace TypeScript 5.0.4 identity and noEmit typecheck"
+  ],
+  "unqualifiedScopes": [
+    "production bundle",
+    "Vite runtime",
+    "browser/provider/wallet/signing/transaction behavior",
+    "Sharp native module load"
+  ],
+  "productionBuildAttemptExitCode": 128,
+  "productionBuildDiagnostic": "permission denied: vite\n",
+  "cleanupVerified": true,
+  "repositoryActionsDisabledAfterRun": true,
+  "boundaryProofHistoricalNotReexecuted": true,
+  "emptyLogRepresentations": [
+    {
+      "original": "immutable.stderr",
+      "representation": "immutable.stderr.empty.json"
+    },
+    {
+      "original": "production-build.stdout",
+      "representation": "production-build.stdout.empty.json"
+    },
+    {
+      "original": "typecheck.stderr",
+      "representation": "typecheck.stderr.empty.json"
+    },
+    {
+      "original": "compiler-identity.stderr",
+      "representation": "compiler-identity.stderr.empty.json"
+    }
+  ]
+}

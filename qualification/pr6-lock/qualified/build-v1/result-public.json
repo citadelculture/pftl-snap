@@ -1,0 +1,232 @@
+{
+  "qualified": false,
+  "phases": [
+    {
+      "phase": "immutable",
+      "exitCode": 0,
+      "oomKilled": false,
+      "runningAfter": false,
+      "stopReason": null,
+      "stdoutSha256": "9913934ce2423039afde0ac4678c4edf85c17e175d3ff6b040d4877c61212779",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "phase": "compiler-identity",
+      "exitCode": 0,
+      "oomKilled": false,
+      "runningAfter": false,
+      "stopReason": null,
+      "stdoutSha256": "5019f195f68741b8832394752264953f3adfa5a6275cc81ef728c2cf5a75a08b",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "phase": "typecheck",
+      "exitCode": 0,
+      "oomKilled": false,
+      "runningAfter": false,
+      "stopReason": null,
+      "stdoutSha256": "8978ba2913bbaff4a40c60a6a622244225690b66ad4cc4819dc9e205cc17afac",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "phase": "production-build",
+      "exitCode": 128,
+      "oomKilled": false,
+      "runningAfter": false,
+      "stopReason": null,
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "343174eca618e54fda23f7009f5913c59c4e088cccc40ada1d9e21aa11c84ad0"
+    }
+  ],
+  "cleanupVerified": true,
+  "hookOrPolicyModified": false,
+  "mode": "locked-compiler-production-build",
+  "boundaryRuntimeQualified": false,
+  "installExecuted": true,
+  "qualificationScope": "Actual locked host-lite compiler and production bundle only",
+  "limits": "No browser/provider/wallet/signing/transaction or Sharp native-load test.",
+  "actualBoundaryProof": {
+    "boundaryReportSha256": "2c37e44a462ec4ae8c82ab9d4a1ea3ac7c960aa6f21c896b2df8c9e62470c551",
+    "boundaryRunId": 40248703034,
+    "boundaryRunAttempt": 1,
+    "boundaryCommit": "c1e3f4f52f286ab0133e56b472a975cfde8cb9d1",
+    "recordedProbesRecomputed": 13,
+    "actualTrafficReexecuted": false,
+    "readbackRepresentation": "typed-payload-protocol-canonical",
+    "image": "node@sha256:51b1100cc2a83d370c6a60952e3f2989c8a43159d0e38586e090f3b3326efefd",
+    "helpers": {
+      "egress_policy.py": "082262d5c3dd69a9411978225e94212ac83049f01417649dc92ca4cbdf0fad9c",
+      "namespace_filter.py": "139e87b4851ed8e18e09c29fa4b499f397c6d5b7a91a0a04e6420593a699be3e"
+    },
+    "rootSourceHead": "0820278c1cd38e6dd6a1ae38631889041bd6f9ba",
+    "rootPayloadManifestSha256": "2b34bd97b9610342d294e00d30a4ecbe131528c17449a9679c1b1cd3ec2a6545",
+    "successfulInstallRunId": 40251608388,
+    "successfulInstallResultSha256": "dad90af019cc281f379d6f2ebec3efd000e21ad990527c7831ff887c0de0d607",
+    "candidateLockSha256": "7e7d3d81d902cc4af88f38cf3a43eb831eeb20861d9097b23b4859f4844e4340",
+    "historicalInstallReexecuted": false,
+    "buildPayloadManifestSha256": "534290266513aee886e459f741e06fc9bed5da6cf0b133bb88138137775977e8"
+  },
+  "dockerDaemon": {
+    "path": "/usr/bin/docker",
+    "sha256": "6435ff9214bf8e0931078fb0980809728cac0a54a526d4f28a26d3e48132b58d",
+    "endpoint": "unix:///run/docker.sock",
+    "nativeLinux": true,
+    "rootless": false,
+    "localRootfulDaemon": true,
+    "builtinSeccomp": true,
+    "runnerDockerConfigRead": false
+  },
+  "phaseReleaseProofs": [
+    {
+      "phase": "immutable",
+      "boundaryReportSha256": "2c37e44a462ec4ae8c82ab9d4a1ea3ac7c960aa6f21c896b2df8c9e62470c551",
+      "boundaryRunId": 40248703034,
+      "boundaryRunAttempt": 1,
+      "boundaryCommit": "c1e3f4f52f286ab0133e56b472a975cfde8cb9d1",
+      "recordedProbesRecomputed": 13,
+      "actualTrafficReexecuted": false,
+      "readbackRepresentation": "typed-payload-protocol-canonical",
+      "image": "node@sha256:51b1100cc2a83d370c6a60952e3f2989c8a43159d0e38586e090f3b3326efefd",
+      "helpers": {
+        "egress_policy.py": "082262d5c3dd69a9411978225e94212ac83049f01417649dc92ca4cbdf0fad9c",
+        "namespace_filter.py": "139e87b4851ed8e18e09c29fa4b499f397c6d5b7a91a0a04e6420593a699be3e"
+      },
+      "rootSourceHead": "0820278c1cd38e6dd6a1ae38631889041bd6f9ba",
+      "rootPayloadManifestSha256": "2b34bd97b9610342d294e00d30a4ecbe131528c17449a9679c1b1cd3ec2a6545",
+      "successfulInstallRunId": 40251608388,
+      "successfulInstallResultSha256": "dad90af019cc281f379d6f2ebec3efd000e21ad990527c7831ff887c0de0d607",
+      "candidateLockSha256": "7e7d3d81d902cc4af88f38cf3a43eb831eeb20861d9097b23b4859f4844e4340",
+      "historicalInstallReexecuted": false,
+      "buildPayloadManifestSha256": "534290266513aee886e459f741e06fc9bed5da6cf0b133bb88138137775977e8"
+    },
+    {
+      "phase": "compiler-identity",
+      "boundaryReportSha256": "2c37e44a462ec4ae8c82ab9d4a1ea3ac7c960aa6f21c896b2df8c9e62470c551",
+      "boundaryRunId": 40248703034,
+      "boundaryRunAttempt": 1,
+      "boundaryCommit": "c1e3f4f52f286ab0133e56b472a975cfde8cb9d1",
+      "recordedProbesRecomputed": 13,
+      "actualTrafficReexecuted": false,
+      "readbackRepresentation": "typed-payload-protocol-canonical",
+      "image": "node@sha256:51b1100cc2a83d370c6a60952e3f2989c8a43159d0e38586e090f3b3326efefd",
+      "helpers": {
+        "egress_policy.py": "082262d5c3dd69a9411978225e94212ac83049f01417649dc92ca4cbdf0fad9c",
+        "namespace_filter.py": "139e87b4851ed8e18e09c29fa4b499f397c6d5b7a91a0a04e6420593a699be3e"
+      },
+      "rootSourceHead": "0820278c1cd38e6dd6a1ae38631889041bd6f9ba",
+      "rootPayloadManifestSha256": "2b34bd97b9610342d294e00d30a4ecbe131528c17449a9679c1b1cd3ec2a6545",
+      "successfulInstallRunId": 40251608388,
+      "successfulInstallResultSha256": "dad90af019cc281f379d6f2ebec3efd000e21ad990527c7831ff887c0de0d607",
+      "candidateLockSha256": "7e7d3d81d902cc4af88f38cf3a43eb831eeb20861d9097b23b4859f4844e4340",
+      "historicalInstallReexecuted": false,
+      "buildPayloadManifestSha256": "534290266513aee886e459f741e06fc9bed5da6cf0b133bb88138137775977e8"
+    },
+    {
+      "phase": "typecheck",
+      "boundaryReportSha256": "2c37e44a462ec4ae8c82ab9d4a1ea3ac7c960aa6f21c896b2df8c9e62470c551",
+      "boundaryRunId": 40248703034,
+      "boundaryRunAttempt": 1,
+      "boundaryCommit": "c1e3f4f52f286ab0133e56b472a975cfde8cb9d1",
+      "recordedProbesRecomputed": 13,
+      "actualTrafficReexecuted": false,
+      "readbackRepresentation": "typed-payload-protocol-canonical",
+      "image": "node@sha256:51b1100cc2a83d370c6a60952e3f2989c8a43159d0e38586e090f3b3326efefd",
+      "helpers": {
+        "egress_policy.py": "082262d5c3dd69a9411978225e94212ac83049f01417649dc92ca4cbdf0fad9c",
+        "namespace_filter.py": "139e87b4851ed8e18e09c29fa4b499f397c6d5b7a91a0a04e6420593a699be3e"
+      },
+      "rootSourceHead": "0820278c1cd38e6dd6a1ae38631889041bd6f9ba",
+      "rootPayloadManifestSha256": "2b34bd97b9610342d294e00d30a4ecbe131528c17449a9679c1b1cd3ec2a6545",
+      "successfulInstallRunId": 40251608388,
+      "successfulInstallResultSha256": "dad90af019cc281f379d6f2ebec3efd000e21ad990527c7831ff887c0de0d607",
+      "candidateLockSha256": "7e7d3d81d902cc4af88f38cf3a43eb831eeb20861d9097b23b4859f4844e4340",
+      "historicalInstallReexecuted": false,
+      "buildPayloadManifestSha256": "534290266513aee886e459f741e06fc9bed5da6cf0b133bb88138137775977e8"
+    },
+    {
+      "phase": "production-build",
+      "boundaryReportSha256": "2c37e44a462ec4ae8c82ab9d4a1ea3ac7c960aa6f21c896b2df8c9e62470c551",
+      "boundaryRunId": 40248703034,
+      "boundaryRunAttempt": 1,
+      "boundaryCommit": "c1e3f4f52f286ab0133e56b472a975cfde8cb9d1",
+      "recordedProbesRecomputed": 13,
+      "actualTrafficReexecuted": false,
+      "readbackRepresentation": "typed-payload-protocol-canonical",
+      "image": "node@sha256:51b1100cc2a83d370c6a60952e3f2989c8a43159d0e38586e090f3b3326efefd",
+      "helpers": {
+        "egress_policy.py": "082262d5c3dd69a9411978225e94212ac83049f01417649dc92ca4cbdf0fad9c",
+        "namespace_filter.py": "139e87b4851ed8e18e09c29fa4b499f397c6d5b7a91a0a04e6420593a699be3e"
+      },
+      "rootSourceHead": "0820278c1cd38e6dd6a1ae38631889041bd6f9ba",
+      "rootPayloadManifestSha256": "2b34bd97b9610342d294e00d30a4ecbe131528c17449a9679c1b1cd3ec2a6545",
+      "successfulInstallRunId": 40251608388,
+      "successfulInstallResultSha256": "dad90af019cc281f379d6f2ebec3efd000e21ad990527c7831ff887c0de0d607",
+      "candidateLockSha256": "7e7d3d81d902cc4af88f38cf3a43eb831eeb20861d9097b23b4859f4844e4340",
+      "historicalInstallReexecuted": false,
+      "buildPayloadManifestSha256": "534290266513aee886e459f741e06fc9bed5da6cf0b133bb88138137775977e8"
+    }
+  ],
+  "lockValidation": {
+    "originalDescriptors": 3757,
+    "candidateDescriptors": 3846,
+    "originalResolutionsAndChecksumsPreserved": true
+  },
+  "compilerIdentity": {
+    "schemaVersion": 1,
+    "packageName": "typescript",
+    "version": "5.0.4",
+    "workspace": "packages/host-lite",
+    "nodeVersion": "v24.21.0",
+    "files": {
+      "packageJson": {
+        "path": "packages/host-lite/node_modules/typescript/package.json",
+        "sha256": "2511540bfed2eb5f9fe933689bd0c5ac96629cefad7518f2b0e29598aec8b624"
+      },
+      "cli": {
+        "path": "packages/host-lite/node_modules/typescript/bin/tsc",
+        "sha256": "8d5fa5bd883fec0979fc2004f1fe1d99aef40570155d550eadc0b03b55513bf0"
+      },
+      "implementation": {
+        "path": "packages/host-lite/node_modules/typescript/lib/tsc.js",
+        "sha256": "e21c9e05cb6dab44db5f0f96d3d5cb01efadd406890d2663a91fcba5c8e7d270"
+      },
+      "library": {
+        "path": "packages/host-lite/node_modules/typescript/lib/typescript.js",
+        "sha256": "a7f255006690bbde4bf90321bc15c0be1325847157c03da0f0ca138855e1df23"
+      }
+    }
+  },
+  "compilerTypecheckBinding": {
+    "actualCompilerBindingMatched": true,
+    "identity": {
+      "schemaVersion": 1,
+      "packageName": "typescript",
+      "version": "5.0.4",
+      "workspace": "packages/host-lite",
+      "nodeVersion": "v24.21.0",
+      "files": {
+        "packageJson": {
+          "path": "packages/host-lite/node_modules/typescript/package.json",
+          "sha256": "2511540bfed2eb5f9fe933689bd0c5ac96629cefad7518f2b0e29598aec8b624"
+        },
+        "cli": {
+          "path": "packages/host-lite/node_modules/typescript/bin/tsc",
+          "sha256": "8d5fa5bd883fec0979fc2004f1fe1d99aef40570155d550eadc0b03b55513bf0"
+        },
+        "implementation": {
+          "path": "packages/host-lite/node_modules/typescript/lib/tsc.js",
+          "sha256": "e21c9e05cb6dab44db5f0f96d3d5cb01efadd406890d2663a91fcba5c8e7d270"
+        },
+        "library": {
+          "path": "packages/host-lite/node_modules/typescript/lib/typescript.js",
+          "sha256": "a7f255006690bbde4bf90321bc15c0be1325847157c03da0f0ca138855e1df23"
+        }
+      }
+    }
+  },
+  "typecheckExecuted": true,
+  "failure": "Phase did not complete successfully: production-build",
+  "hostHomeUnchanged": true,
+  "cleanupErrors": [],
+  "finishedAtUtc": "2026-10-26T01:55:44.475669+00:00"
+}
