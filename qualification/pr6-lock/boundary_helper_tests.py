@@ -1,16 +1,22 @@
 """Pure synthetic decision tests; no subprocess, DNS, Node, Docker or namespace tools."""
 import copy
 import hashlib
+import io
 import json
 import os
 from pathlib import Path
 import sys
+import stat
+from types import SimpleNamespace
 import unittest
+from unittest import mock
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from boundary_contract import (Refusal, assess_probe, check_environment, child_environment, confinement_result,
                                controls_sha, probe_plan)
-from boundary_host import validate_container, validate_ready
+import boundary_host
+from boundary_host import (CommandFailure, alias_identity, bind_tools, package_aliases,
+                           package_ownership, validate_container, validate_ready)
 
 NONCE = "a" * 32
 ID = "b" * 64
@@ -116,6 +122,79 @@ class BoundaryDecisions(unittest.TestCase):
         self.assertFalse(confinement_result(True, rows, True, False, True, True))
         self.assertFalse(confinement_result(True, rows, True, True, False, True))
         self.assertFalse(confinement_result(True, rows, True, True, True, False))
+
+class ProtectedPackageAliases(unittest.TestCase):
+    row = {"path": "/usr/sbin/ip", "sha256": "a" * 64}
+    def identify(self, candidate, row):
+        return {"path": candidate, "eligible": True, "canonicalPath": row["path"],
+                "device": 2, "inode": 19, "sameCanonicalTarget": True, "sameDeviceAndInode": True}
+    def test_candidates_are_only_exact_conventional_spellings(self):
+        self.assertEqual(package_aliases("/usr/sbin/ip"), ["/usr/sbin/ip", "/sbin/ip"])
+        self.assertEqual(package_aliases("/usr/bin/nsenter"), ["/usr/bin/nsenter", "/bin/nsenter"])
+        with self.assertRaises(Refusal): package_aliases("/tmp/ip")
+    def test_canonical_owner_needs_no_alias_lookup(self):
+        query = mock.Mock(return_value="iproute2: /usr/sbin/ip\n")
+        result = package_ownership(self.row, [], query, self.identify)
+        self.assertEqual(result["packages"], ["iproute2"])
+        query.assert_called_once_with(["/usr/bin/dpkg-query", "-S", "/usr/sbin/ip"])
+    def test_merged_usr_alias_is_accepted_only_after_exact_miss(self):
+        miss = CommandFailure(["/usr/bin/dpkg-query"], 1, b"", b"synthetic no matching path")
+        query = mock.Mock(side_effect=[miss, "iproute2:amd64: /sbin/ip\n"])
+        attempts = []
+        result = package_ownership(self.row, attempts, query, self.identify)
+        self.assertEqual(result, {"path": "/sbin/ip", "packages": ["iproute2:amd64"], "record": "iproute2:amd64: /sbin/ip"})
+        self.assertEqual([row["path"] for row in attempts], ["/usr/sbin/ip", "/sbin/ip"])
+        self.assertEqual(attempts[0]["lookup"]["exitCode"], 1)
+        self.assertNotIn("synthetic no matching path", json.dumps(attempts))
+    def test_unknown_ownership_and_absent_alias_remain_fail_closed(self):
+        miss = CommandFailure(["/usr/bin/dpkg-query"], 1, b"", b"synthetic miss")
+        def identify(candidate, row):
+            return self.identify(candidate, row) if candidate==row["path"] else {"path":candidate,"eligible":False,"reason":"absent"}
+        query = mock.Mock(side_effect=miss)
+        with self.assertRaises(Refusal): package_ownership(self.row, [], query, identify)
+        self.assertEqual(query.call_count, 1)
+    def test_nonlookup_command_failures_never_trigger_alias_fallback(self):
+        for code, output in [(2, b""), (1, b"unexpected partial output")]:
+            query = mock.Mock(side_effect=CommandFailure(["/usr/bin/dpkg-query"], code, output, b"synthetic"))
+            with self.subTest(code=code), self.assertRaises(CommandFailure):
+                package_ownership(self.row, [], query, self.identify)
+            self.assertEqual(query.call_count, 1)
+    def test_wrong_path_glob_diversion_duplicate_and_invalid_owner_are_rejected(self):
+        for output in ["iproute2: /tmp/ip", "iproute2: /usr/sbin/*", "diversion by hostile from: /usr/sbin/ip",
+                       "iproute2: /usr/sbin/ip\niproute2: /usr/sbin/ip", "hostile;exec: /usr/sbin/ip", ""]:
+            with self.subTest(output=output), self.assertRaises(Refusal):
+                package_ownership(self.row, [], lambda argv: output, self.identify)
+    def test_post_lookup_target_swap_is_rejected(self):
+        first = self.identify(self.row["path"], self.row)
+        identify = mock.Mock(side_effect=[first, {**first, "inode":20}])
+        with self.assertRaises(Refusal):
+            package_ownership(self.row, [], lambda argv:"iproute2: /usr/sbin/ip", identify)
+    def check_identity(self, *, inode=19, device=2, target="/usr/sbin/ip", uid=0, mode=0o755, parent_uid=0, parent_mode=0o755, elf=True, pin=True):
+        canonical = Path(self.row["path"]); alias = Path("/sbin/ip")
+        file_info = SimpleNamespace(st_mode=stat.S_IFREG | mode, st_uid=uid, st_dev=2, st_ino=19)
+        alias_info = SimpleNamespace(st_mode=stat.S_IFREG | 0o755, st_uid=0, st_dev=device, st_ino=inode)
+        directory = SimpleNamespace(st_mode=stat.S_IFDIR | parent_mode, st_uid=parent_uid)
+        def lstat(path): return file_info if path==canonical else alias_info
+        def actual_stat(path): return directory if path==canonical.parent else alias_info
+        def resolve(path, strict=False): return Path(target) if path==alias else canonical.parent
+        with mock.patch.object(Path,"lstat",lstat), mock.patch.object(Path,"stat",actual_stat), mock.patch.object(Path,"resolve",resolve), \
+             mock.patch.object(Path,"open",lambda *args,**kwargs:io.BytesIO(b"\x7fELF" if elf else b"fake")), \
+             mock.patch.object(boundary_host,"digest",return_value=self.row["sha256"] if pin else "b"*64):
+            return alias_identity(str(alias), self.row)
+    def test_alias_requires_same_actual_inode_device_and_canonical_target(self):
+        self.assertTrue(self.check_identity()["eligible"])
+        for change in ({"inode":20},{"device":3},{"target":"/tmp/ip"},{"uid":1000},{"mode":0o777},
+                       {"parent_uid":1000},{"parent_mode":0o777},{"elf":False},{"pin":False}):
+            with self.subTest(change=change), self.assertRaises(Refusal): self.check_identity(**change)
+    def test_failure_report_identifies_tool_phase_without_raw_diagnostics(self):
+        progress=[]
+        with mock.patch.object(boundary_host,"canonical_elf",return_value=self.row), \
+             mock.patch.object(boundary_host,"bounded",return_value="synthetic version"), \
+             mock.patch.object(boundary_host,"package_ownership",side_effect=Refusal("synthetic refusal")):
+            with self.assertRaisesRegex(Refusal,"nsenter:package-ownership"): bind_tools(progress)
+        self.assertEqual(progress[0]["tool"],"nsenter")
+        self.assertEqual(progress[0]["phase"],"package-ownership")
+        self.assertEqual(progress[0]["status"],"failed")
 
 if __name__ == "__main__":
     if sys.argv[1:] == ["--check-current-environment"]:

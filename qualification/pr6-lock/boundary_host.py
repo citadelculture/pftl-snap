@@ -7,6 +7,7 @@ import ipaddress
 import json
 import os
 from pathlib import Path
+import re
 import selectors
 import shutil
 import socket
@@ -29,6 +30,14 @@ OWNER_LABEL = "org.postfiat.boundary.nonce"
 def digest(path):
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
+class CommandFailure(Refusal):
+    def __init__(self, argv, code, out, err):
+        self.evidence = {"command": Path(argv[0]).name, "exitCode": code,
+                         "stdoutBytes": len(out), "stderrBytes": len(err),
+                         "stdoutSha256": hashlib.sha256(out).hexdigest(),
+                         "stderrSha256": hashlib.sha256(err).hexdigest()}
+        super().__init__("Trusted command failed: " + self.evidence["command"] + ":" + str(code))
+
 def bounded(argv, *, timeout=10, env=None, input_text=None):
     # Temporary files bound RAM; output over the explicit bound refuses the run.
     with tempfile.TemporaryFile() as stdout, tempfile.TemporaryFile() as stderr:
@@ -40,7 +49,7 @@ def bounded(argv, *, timeout=10, env=None, input_text=None):
         stdout.seek(0); stderr.seek(0)
         out, err = stdout.read(), stderr.read()
     if result.returncode:
-        raise Refusal("Trusted command failed: " + Path(argv[0]).name + ":" + str(result.returncode))
+        raise CommandFailure(argv, result.returncode, out, err)
     return out.decode("utf8", errors="strict")
 
 def canonical_elf(name):
@@ -56,18 +65,92 @@ def canonical_elf(name):
             raise Refusal("Native host ELF tool required: " + name)
     return {"path": str(path), "sha256": digest(path)}
 
-def bind_tools():
-    tools = {name: canonical_elf(name) for name in ("nsenter", "nft", "ip")}
+def package_aliases(canonical):
+    path = Path(canonical)
+    parent = {"/usr/bin": "/bin", "/usr/sbin": "/sbin"}.get(str(path.parent))
+    if parent is None:
+        raise Refusal("Package lookup requires a canonical system tool path")
+    return [str(path), str(Path(parent) / path.name)]
+
+def alias_identity(candidate, row):
+    canonical, alias = Path(row["path"]), Path(candidate)
+    target = canonical.lstat()
+    if (not stat.S_ISREG(target.st_mode) or target.st_uid != 0 or target.st_mode & 0o022
+            or digest(canonical) != row["sha256"]):
+        raise Refusal("Canonical protected tool changed during package lookup")
+    with canonical.open("rb") as stream:
+        if stream.read(4) != b"\x7fELF":
+            raise Refusal("Canonical tool lost its ELF identity")
+    try:
+        link, actual = alias.lstat(), alias.stat()
+        parent = alias.parent.resolve(strict=True)
+        parent_info = parent.stat()
+        resolved = alias.resolve(strict=True)
+    except FileNotFoundError:
+        return {"path": candidate, "eligible": False, "reason": "absent"}
+    if (candidate not in package_aliases(row["path"]) or resolved != canonical
+            or parent != canonical.parent or parent_info.st_uid != 0
+            or not stat.S_ISDIR(parent_info.st_mode) or parent_info.st_mode & 0o022
+            or link.st_uid != 0 or (not stat.S_ISLNK(link.st_mode) and link.st_mode & 0o022)
+            or (actual.st_dev, actual.st_ino) != (target.st_dev, target.st_ino)):
+        raise Refusal("Package alias is not the same protected canonical tool")
+    return {"path": candidate, "eligible": True, "canonicalPath": str(canonical),
+            "device": actual.st_dev, "inode": actual.st_ino,
+            "sameCanonicalTarget": True, "sameDeviceAndInode": True}
+
+def package_ownership(row, attempts, query=bounded, identify=alias_identity):
+    for candidate in package_aliases(row["path"]):
+        attempt = identify(candidate, row)
+        attempts.append(attempt)
+        if not attempt["eligible"]:
+            continue
+        try:
+            output = query(["/usr/bin/dpkg-query", "-S", candidate]).strip()
+        except CommandFailure as error:
+            attempt["lookup"] = error.evidence
+            # dpkg-query -S exit 1 with empty stdout is only a lookup miss.
+            if error.evidence["exitCode"] == 1 and error.evidence["stdoutBytes"] == 0:
+                continue
+            raise
+        owners = []
+        for line in output.splitlines():
+            package, separator, owned_path = line.partition(": ")
+            if not separator or owned_path != candidate or not re.fullmatch(r"[a-z0-9][a-z0-9+.-]+(?::[a-z0-9][a-z0-9-]*)?", package):
+                raise Refusal("Exact package-owned tool path required")
+            owners.append(package)
+        if not owners or len(owners) != len(set(owners)):
+            raise Refusal("Missing or duplicate package ownership record")
+        # Detect a target swap after the metadata lookup before accepting it.
+        if identify(candidate, row) != {key: value for key, value in attempt.items() if key != "lookup"}:
+            raise Refusal("Package-owned tool identity changed during lookup")
+        attempt["lookup"] = {"command": "dpkg-query", "exitCode": 0, "exactOwnedPath": True}
+        return {"path": candidate, "packages": sorted(owners), "record": output}
+    raise Refusal("No exact package-owned alias for protected tool")
+
+def bind_tools(diagnostics):
+    tools = {}
     descriptions = {}
-    for name, row in tools.items():
-        version = bounded([row["path"], "-Version" if name == "ip" else "--version"]).strip()
-        ownership = bounded(["/usr/bin/dpkg-query", "-S", row["path"]]).strip()
-        packages = sorted({line.split(": ", 1)[0] for line in ownership.splitlines()})
-        if not packages or any(not package or any(c not in "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789+.-:" for c in package) for package in packages):
-            raise Refusal("Unsupported host package ownership record")
-        versions = bounded(["/usr/bin/dpkg-query", "-W", "-f=${binary:Package} ${Version} ${source:Package} ${source:Version}\\n", *packages]).strip()
-        descriptions[name] = {"version": version[:2048], "packageOwnership": ownership[:4096],
-                              "packageVersions": versions[:4096], **row}
+    for name in ("nsenter", "nft", "ip"):
+        progress = {"tool": name, "phase": "canonical-elf", "status": "pending", "ownershipAttempts": []}
+        diagnostics.append(progress)
+        try:
+            row = canonical_elf(name); tools[name] = row
+            progress["canonicalPath"] = row["path"]
+            progress["phase"] = "version"
+            version = bounded([row["path"], "-Version" if name == "ip" else "--version"]).strip()
+            progress["phase"] = "package-ownership"
+            ownership = package_ownership(row, progress["ownershipAttempts"])
+            progress["phase"] = "package-version"
+            versions = bounded(["/usr/bin/dpkg-query", "-W", "-f=${binary:Package} ${Version} ${source:Package} ${source:Version}\\n", *ownership["packages"]]).strip()
+            if not versions:
+                raise Refusal("Empty installed package version evidence")
+            descriptions[name] = {"version": version[:2048], "packageOwnership": ownership,
+                                  "packageVersions": versions[:4096], **row}
+            progress.update(status="bound", phase="complete")
+        except Exception as error:
+            progress["status"] = "failed"
+            progress["failure"] = error.evidence if isinstance(error, CommandFailure) else {"kind": type(error).__name__}
+            raise Refusal("Host tool binding failed: " + name + ":" + progress["phase"]) from error
     binding = {"schemaVersion": 1, "tools": tools}
     verify_tools(binding)
     return binding, descriptions
@@ -220,7 +303,8 @@ def root_run(output):
         source_names = ["boundary_host.py", "boundary_contract.py", "boundary_probe.cjs", *HELPERS]
         source_pins = {name: digest(HERE / name) for name in source_names}
         report["sourcePins"] = source_pins
-        binding, descriptions = bind_tools()
+        report["toolBindingProgress"] = []
+        binding, descriptions = bind_tools(report["toolBindingProgress"])
         report["hostTools"] = descriptions
         docker_binding = canonical_elf("docker")
         docker = docker_binding["path"]
