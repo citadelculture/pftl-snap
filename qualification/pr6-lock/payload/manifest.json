@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "files": [
+    {
+      "path": "candidate/packages/host-lite/package.json",
+      "bytes": 485,
+      "sha256": "7623d57759c3a76e669ca51be0bcd2e36fc4f998cdd32a1e62d0abb7b8ca231e"
+    },
+    {
+      "path": "candidate/packages/host-lite/src/App.tsx",
+      "bytes": 16938,
+      "sha256": "a8d5a444b8595ab5d71f123e6fa44b42dc3bfb8efeae0c068c471c4c1a641135"
+    },
+    {
+      "path": "candidate/packages/host-lite/src/vite-env.d.ts",
+      "bytes": 38,
+      "sha256": "65996936fbb042915f7b74a200fcdde7e410f32a669b1ab9597cfaa4b0faddb5"
+    },
+    {
+      "path": "candidate.patch",
+      "bytes": 9084,
+      "sha256": "2bb4001b1866f75e403463d354af5c9eee6db6c8d349d4299df7638ebe3a01f8"
+    },
+    {
+      "path": "frozen-candidate-files.json",
+      "bytes": 978978,
+      "sha256": "e62a6f3a3b5b34af333d6b8a20043e8cd902ead4fe80aa00ffa94ebc9ae4b5e0"
+    },
+    {
+      "path": "provenance.json",
+      "bytes": 1564,
+      "sha256": "a9e8b66fd4eb7cca370d05937585f68bb6601fb2d36d428e851ec0f1228ca006"
+    }
+  ],
+  "sourceHead": "0820278c1cd38e6dd6a1ae38631889041bd6f9ba",
+  "sourceInventorySha256": "e62a6f3a3b5b34af333d6b8a20043e8cd902ead4fe80aa00ffa94ebc9ae4b5e0",
+  "publicSafety": "Exact public-source candidate bytes and relative paths/hashes only; no owner paths, environment values, credentials, private logs or operator data."
+}

@@ -1,0 +1,15 @@
+# Bounded original-hook lock qualification
+
+This runtime candidate binds the reviewed source and actual confinement proof to one expiring install admission. Publication alone does not execute it. Dispatch requires a separate normal-reviewed operation on the owned manual workflow; no install success is claimed in advance.
+
+The exact source is postfiatorg/pftl-snap at `0820278c1cd38e6dd6a1ae38631889041bd6f9ba`, plus the three frozen host-lite correction files in the payload. The 4473-file candidate inventory, original root hook, LavaMoat policies, Yarn3.2.1 and original lock input remain pinned. Generation uses `install --no-immutable`; verification uses `install --immutable`. Both must really complete with actual linker state, unchanged protected resolutions/checksums and identical candidate lock bytes in the second phase.
+
+Boundary run40248703034 at `c1e3f4f52f286ab0133e56b472a975cfde8cb9d1` completed successfully at2026-10-26T00:18:57Z. Its exact report/provenance are included: one public TCP443 connection and twelve negative counter-backed probes passed, with final filter and complete cleanup. The proof validator recomputes all13 records. This is historical confinement evidence, not an install result or a fresh endpoint observation.
+
+Each install phase gets a new fixed-host endpoint policy and protected host-tool identities. Exact numeric nft readback, default-deny IPv4/IPv6, literal public TCP443 endpoints, DNS refusal and local/gateway exclusions remain enforced before the package gate opens. No in-phase policy widening or renewal occurs. Shared CDN addresses do not provide HTTPS-origin isolation.
+
+The pinned Node24.21.0 Linux image runs as its real node uid1000, with an owned home volume, read-only root, private namespaces, all capabilities dropped, no-new-privileges and builtin seccomp. No credentials, service environment, host home, Git metadata or Docker socket enter the package container. Inherited control values remain exact; incompatible controls refuse. Docker ELF/path/hash identity is rechecked before each operation.
+
+Only the reviewed conditional host nftables package step may prepare the runner. No child compiler, Python, package policy exception or modified hook is provisioned. Original policy-permitted Sharp libvips/addon download or compilation fallback may occur and may fail honestly. Native-load, Vite/product, wallet, signing and transfer results are outside this qualification.
+
+Limits:900seconds per phase,4GiB memory,2CPUs,256PIDs,8GiB initial free space and4GiB reserve,16MiB output per phase,40-minute job. Exact owned containers, labeled home volume and copied source are removed; captured evidence is retained. Missing source/tool/expiry/resource/cleanup evidence fails qualification. The exact admission below is checked before preparation and again immediately before atomic gate release, with enough remaining lifetime for the whole phase plus cleanup.

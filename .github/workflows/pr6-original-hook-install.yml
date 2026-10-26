@@ -1,0 +1,69 @@
+name: PR6 bounded original-hook install qualification
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: pr6-original-hook-install
+  cancel-in-progress: false
+jobs:
+  install:
+    # Separate from the published boundary workflow. No repository settings or
+    # workflow state is changed by this source packet. Exact admission is pinned below.
+    if: github.repository == 'citadelculture/pftl-snap'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    steps:
+      - name: Checkout exact reviewed integration revision
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: ${{ github.sha }}
+          path: control
+          persist-credentials: false
+          fetch-depth: 1
+          submodules: false
+          lfs: false
+      - name: Checkout exact upstream source
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: postfiatorg/pftl-snap
+          ref: 0820278c1cd38e6dd6a1ae38631889041bd6f9ba
+          path: upstream
+          persist-credentials: false
+          fetch-depth: 1
+          submodules: false
+          lfs: false
+      - name: Preserve inherited controls before trusted-host network setup
+        run: /usr/bin/python3 -I control/qualification/pr6-lock/check-host-environment.py
+      - name: Explicit trusted-host nftables preparation if missing
+        timeout-minutes: 5
+        run: |
+          if ! command -v nft >/dev/null 2>&1; then
+            sudo -n apt-get update
+            sudo -n apt-get install --yes --no-install-recommends nftables
+          fi
+      - name: Require actual proof and run separately admitted original hook
+        # Exact admission, actual boundary proof and expiry are rechecked before package execution.
+        # Only host nftables may be provisioned above. No child tool/compiler setup.
+        run: >-
+          /usr/bin/python3 -I control/qualification/pr6-lock/run-hosted-lock.py
+          --source "$GITHUB_WORKSPACE/upstream"
+          --outputs "$GITHUB_WORKSPACE/pr6-install-evidence"
+          --admission "$GITHUB_WORKSPACE/control/qualification/pr6-lock/admission/full-install-admission.json"
+          --admission-sha256 e5b423da6afe1e7ae23a5469835346f151cca6c111205ce4903267a6072a9f00
+          --boundary-report "$GITHUB_WORKSPACE/control/qualification/pr6-lock/admission/boundary-report.json"
+          --boundary-provenance "$GITHUB_WORKSPACE/control/qualification/pr6-lock/admission/boundary-provenance.json"
+      - name: Preserve requested install evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: pr6-original-hook-install
+          path: |
+            pr6-install-evidence/*.json
+            pr6-install-evidence/*.stdout
+            pr6-install-evidence/*.stderr
+            pr6-install-evidence/*-inputs/*.json
+            pr6-install-evidence/candidate-yarn.lock
+          if-no-files-found: error
+          retention-days: 7
+          include-hidden-files: false

@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "operation": "original-hook-full-install",
+  "executionAdmitted": true,
+  "repository": "citadelculture/pftl-snap",
+  "sourceHead": "0820278c1cd38e6dd6a1ae38631889041bd6f9ba",
+  "payloadManifestSha256": "2b34bd97b9610342d294e00d30a4ecbe131528c17449a9679c1b1cd3ec2a6545",
+  "image": "node@sha256:51b1100cc2a83d370c6a60952e3f2989c8a43159d0e38586e090f3b3326efefd",
+  "boundaryReportSha256": "2c37e44a462ec4ae8c82ab9d4a1ea3ac7c960aa6f21c896b2df8c9e62470c551",
+  "boundaryProvenanceSha256": "7899bff951e85da32641cad5b116f64c9ce66b260f74353bf7e4cf4b154d36a7",
+  "allowedPhases": [
+    "generate",
+    "immutable"
+  ],
+  "originalHookRequired": true,
+  "rootPoliciesUnchanged": true,
+  "nativeEffectsReviewed": true,
+  "expiresAtUtc": "2026-10-26T01:32:57.260161+00:00"
+}

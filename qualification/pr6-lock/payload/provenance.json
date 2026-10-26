@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "sourceRepository": "postfiatorg/pftl-snap",
+  "sourceHead": "0820278c1cd38e6dd6a1ae38631889041bd6f9ba",
+  "sourceTree": "2d6666aba60dbd00d912034cc2d4def5200ceac9",
+  "sourceArchiveUrl": "https://codeload.github.com/postfiatorg/pftl-snap/tar.gz/0820278c1cd38e6dd6a1ae38631889041bd6f9ba",
+  "sourceArchiveSha256": "2825ae99022f36f41e55574a75ea4eeb74ce4acd497f6968d4411c8c0988ca02",
+  "sourceFiles": 4472,
+  "candidateFiles": 4473,
+  "changes": [
+    {
+      "path": "packages/host-lite/package.json",
+      "beforeSha256": "57e7ca360fe570de47eb66789089a215f8a3079085bca287f70d0abdbee133eb",
+      "afterSha256": "7623d57759c3a76e669ca51be0bcd2e36fc4f998cdd32a1e62d0abb7b8ca231e"
+    },
+    {
+      "path": "packages/host-lite/src/App.tsx",
+      "beforeSha256": "d80f663e81176b760f1be60f112c230067693dfbe76792116dfd7fccf877c527",
+      "afterSha256": "a8d5a444b8595ab5d71f123e6fa44b42dc3bfb8efeae0c068c471c4c1a641135"
+    },
+    {
+      "path": "packages/host-lite/src/vite-env.d.ts",
+      "beforeSha256": null,
+      "afterSha256": "65996936fbb042915f7b74a200fcdde7e410f32a669b1ab9597cfaa4b0faddb5"
+    }
+  ],
+  "scope": "Three previously qualified host-lite corrections only: App wallet/account revalidation, TypeScript5.0.4 exact pin and actual Vite client ambient types. Original root/site/snap configs, original Yarn3.2.1 hook and original lock remain unchanged.",
+  "qualificationLimit": "This packet does not claim lock generation, original-hook immutable install, native Sharp, Vite/product build or on-chain behavior success."
+}

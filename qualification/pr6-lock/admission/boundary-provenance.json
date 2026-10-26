@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "repository": "citadelculture/pftl-snap",
+  "runId": 40248703034,
+  "runAttempt": 1,
+  "headSha": "c1e3f4f52f286ab0133e56b472a975cfde8cb9d1",
+  "workflowPath": ".github/workflows/pr6-lock-qualification.yml",
+  "status": "completed",
+  "conclusion": "success",
+  "completedAtUtc": "2026-10-26T00:18:57Z",
+  "artifactName": "pr6-confinement-boundary",
+  "reportSha256": "2c37e44a462ec4ae8c82ab9d4a1ea3ac7c960aa6f21c896b2df8c9e62470c551"
+}

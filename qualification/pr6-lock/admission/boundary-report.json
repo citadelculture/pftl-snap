@@ -1,0 +1,1463 @@
+{
+  "schemaVersion": 1,
+  "kind": "confinement-boundary-only",
+  "nonce": "ad3a6aff0e3349fba2659389f2b8ac8e",
+  "image": "node@sha256:51b1100cc2a83d370c6a60952e3f2989c8a43159d0e38586e090f3b3326efefd",
+  "packageCommandsExecuted": false,
+  "fullInstallAdmitted": false,
+  "phase": "complete",
+  "probes": [
+    {
+      "id": "public_443",
+      "positive": true,
+      "actual": {
+        "event": "result",
+        "id": "public_443",
+        "operation": "tcp",
+        "address": "104.16.212.131",
+        "port": 443,
+        "outcome": "connected"
+      },
+      "counterBefore": {
+        "packets": 0,
+        "bytes": 0
+      },
+      "counterAfter": {
+        "packets": 0,
+        "bytes": 0
+      },
+      "counterDelta": {
+        "packets": 0,
+        "bytes": 0
+      },
+      "passed": true,
+      "evidence": "actual public TCP443 connect"
+    },
+    {
+      "id": "public_wrong_port",
+      "positive": false,
+      "actual": {
+        "event": "result",
+        "id": "public_wrong_port",
+        "operation": "tcp",
+        "address": "104.16.212.131",
+        "port": 80,
+        "outcome": "timeout"
+      },
+      "counterBefore": {
+        "packets": 0,
+        "bytes": 0
+      },
+      "counterAfter": {
+        "packets": 2,
+        "bytes": 120
+      },
+      "counterDelta": {
+        "packets": 2,
+        "bytes": 120
+      },
+      "passed": true,
+      "evidence": "correlated kernel drop counter increase"
+    },
+    {
+      "id": "public_udp_443",
+      "positive": false,
+      "actual": {
+        "event": "result",
+        "id": "public_udp_443",
+        "operation": "udp",
+        "address": "104.16.212.131",
+        "port": 443,
+        "outcome": "error",
+        "errorCode": "EPERM"
+      },
+      "counterBefore": {
+        "packets": 2,
+        "bytes": 120
+      },
+      "counterAfter": {
+        "packets": 3,
+        "bytes": 182
+      },
+      "counterDelta": {
+        "packets": 1,
+        "bytes": 62
+      },
+      "passed": true,
+      "evidence": "correlated kernel drop counter increase"
+    },
+    {
+      "id": "dns_udp",
+      "positive": false,
+      "actual": {
+        "event": "result",
+        "id": "dns_udp",
+        "operation": "udp",
+        "address": "1.1.1.1",
+        "port": 53,
+        "outcome": "error",
+        "errorCode": "EPERM"
+      },
+      "counterBefore": {
+        "packets": 3,
+        "bytes": 182
+      },
+      "counterAfter": {
+        "packets": 4,
+        "bytes": 244
+      },
+      "counterDelta": {
+        "packets": 1,
+        "bytes": 62
+      },
+      "passed": true,
+      "evidence": "correlated kernel drop counter increase"
+    },
+    {
+      "id": "dns_tcp",
+      "positive": false,
+      "actual": {
+        "event": "result",
+        "id": "dns_tcp",
+        "operation": "tcp",
+        "address": "1.1.1.1",
+        "port": 53,
+        "outcome": "timeout"
+      },
+      "counterBefore": {
+        "packets": 4,
+        "bytes": 244
+      },
+      "counterAfter": {
+        "packets": 6,
+        "bytes": 364
+      },
+      "counterDelta": {
+        "packets": 2,
+        "bytes": 120
+      },
+      "passed": true,
+      "evidence": "correlated kernel drop counter increase"
+    },
+    {
+      "id": "loopback_tcp",
+      "positive": false,
+      "actual": {
+        "event": "result",
+        "id": "loopback_tcp",
+        "operation": "tcp",
+        "address": "127.0.0.1",
+        "port": 443,
+        "outcome": "timeout"
+      },
+      "counterBefore": {
+        "packets": 6,
+        "bytes": 364
+      },
+      "counterAfter": {
+        "packets": 8,
+        "bytes": 484
+      },
+      "counterDelta": {
+        "packets": 2,
+        "bytes": 120
+      },
+      "passed": true,
+      "evidence": "correlated kernel drop counter increase"
+    },
+    {
+      "id": "loopback_udp",
+      "positive": false,
+      "actual": {
+        "event": "result",
+        "id": "loopback_udp",
+        "operation": "udp",
+        "address": "127.0.0.1",
+        "port": 53,
+        "outcome": "error",
+        "errorCode": "EPERM"
+      },
+      "counterBefore": {
+        "packets": 8,
+        "bytes": 484
+      },
+      "counterAfter": {
+        "packets": 9,
+        "bytes": 546
+      },
+      "counterDelta": {
+        "packets": 1,
+        "bytes": 62
+      },
+      "passed": true,
+      "evidence": "correlated kernel drop counter increase"
+    },
+    {
+      "id": "host_gateway",
+      "positive": false,
+      "actual": {
+        "event": "result",
+        "id": "host_gateway",
+        "operation": "tcp",
+        "address": "172.17.0.1",
+        "port": 443,
+        "outcome": "timeout"
+      },
+      "counterBefore": {
+        "packets": 9,
+        "bytes": 546
+      },
+      "counterAfter": {
+        "packets": 11,
+        "bytes": 666
+      },
+      "counterDelta": {
+        "packets": 2,
+        "bytes": 120
+      },
+      "passed": true,
+      "evidence": "correlated kernel drop counter increase"
+    },
+    {
+      "id": "private_ipv4",
+      "positive": false,
+      "actual": {
+        "event": "result",
+        "id": "private_ipv4",
+        "operation": "tcp",
+        "address": "10.255.255.254",
+        "port": 443,
+        "outcome": "timeout"
+      },
+      "counterBefore": {
+        "packets": 11,
+        "bytes": 666
+      },
+      "counterAfter": {
+        "packets": 13,
+        "bytes": 786
+      },
+      "counterDelta": {
+        "packets": 2,
+        "bytes": 120
+      },
+      "passed": true,
+      "evidence": "correlated kernel drop counter increase"
+    },
+    {
+      "id": "metadata_ipv4",
+      "positive": false,
+      "actual": {
+        "event": "result",
+        "id": "metadata_ipv4",
+        "operation": "tcp",
+        "address": "169.254.169.254",
+        "port": 80,
+        "outcome": "timeout"
+      },
+      "counterBefore": {
+        "packets": 13,
+        "bytes": 786
+      },
+      "counterAfter": {
+        "packets": 15,
+        "bytes": 906
+      },
+      "counterDelta": {
+        "packets": 2,
+        "bytes": 120
+      },
+      "passed": true,
+      "evidence": "correlated kernel drop counter increase"
+    },
+    {
+      "id": "azure_platform",
+      "positive": false,
+      "actual": {
+        "event": "result",
+        "id": "azure_platform",
+        "operation": "tcp",
+        "address": "168.63.129.16",
+        "port": 443,
+        "outcome": "timeout"
+      },
+      "counterBefore": {
+        "packets": 15,
+        "bytes": 906
+      },
+      "counterAfter": {
+        "packets": 17,
+        "bytes": 1026
+      },
+      "counterDelta": {
+        "packets": 2,
+        "bytes": 120
+      },
+      "passed": true,
+      "evidence": "correlated kernel drop counter increase"
+    },
+    {
+      "id": "ipv6_loopback_tcp",
+      "positive": false,
+      "actual": {
+        "event": "result",
+        "id": "ipv6_loopback_tcp",
+        "operation": "tcp",
+        "address": "::1",
+        "port": 443,
+        "outcome": "timeout"
+      },
+      "counterBefore": {
+        "packets": 17,
+        "bytes": 1026
+      },
+      "counterAfter": {
+        "packets": 19,
+        "bytes": 1186
+      },
+      "counterDelta": {
+        "packets": 2,
+        "bytes": 160
+      },
+      "passed": true,
+      "evidence": "correlated kernel drop counter increase"
+    },
+    {
+      "id": "ipv6_loopback_udp",
+      "positive": false,
+      "actual": {
+        "event": "result",
+        "id": "ipv6_loopback_udp",
+        "operation": "udp",
+        "address": "::1",
+        "port": 53,
+        "outcome": "error",
+        "errorCode": "EPERM"
+      },
+      "counterBefore": {
+        "packets": 19,
+        "bytes": 1186
+      },
+      "counterAfter": {
+        "packets": 20,
+        "bytes": 1268
+      },
+      "counterDelta": {
+        "packets": 1,
+        "bytes": 82
+      },
+      "passed": true,
+      "evidence": "correlated kernel drop counter increase"
+    }
+  ],
+  "setupComplete": true,
+  "finalFilterValid": true,
+  "workloadCompleted": true,
+  "sourcePinsPreserved": true,
+  "cleanup": {
+    "complete": true,
+    "errors": [],
+    "heldNamespaceFdClosed": true,
+    "persistentVolumesCreated": 0,
+    "tmpfsLifetime": "owned container only",
+    "ownedContainerAbsent": true
+  },
+  "failures": [],
+  "limits": [
+    "Within-run tool drift pins are not externally authenticated binary checksums.",
+    "Counter attribution uses a single owned builtin process and one outstanding network operation.",
+    "This is confinement evidence only, not a package/native/install admission."
+  ],
+  "sourcePins": {
+    "boundary_host.py": "4353f50ce7d66ff728fd62bf350b5b672cc156160baa2f8687a63c4a7e8a687d",
+    "boundary_contract.py": "6e5c9215f9f4c1619278681ec59dc76c69f3b03db0e568301ea2a4d74f061751",
+    "boundary_probe.cjs": "1b84490f8a9cf3a6f9899c158d1792c6cf058984cba5f5594fc9eab436fb4644",
+    "egress_policy.py": "082262d5c3dd69a9411978225e94212ac83049f01417649dc92ca4cbdf0fad9c",
+    "namespace_filter.py": "139e87b4851ed8e18e09c29fa4b499f397c6d5b7a91a0a04e6420593a699be3e"
+  },
+  "toolBindingProgress": [
+    {
+      "tool": "nsenter",
+      "phase": "complete",
+      "status": "bound",
+      "ownershipAttempts": [
+        {
+          "path": "/usr/bin/nsenter",
+          "eligible": true,
+          "canonicalPath": "/usr/bin/nsenter",
+          "device": 66305,
+          "inode": 1899,
+          "sameCanonicalTarget": true,
+          "sameDeviceAndInode": true,
+          "lookup": {
+            "command": "dpkg-query",
+            "exitCode": 0,
+            "exactOwnedPath": true
+          }
+        }
+      ],
+      "canonicalPath": "/usr/bin/nsenter"
+    },
+    {
+      "tool": "nft",
+      "phase": "complete",
+      "status": "bound",
+      "ownershipAttempts": [
+        {
+          "path": "/usr/sbin/nft",
+          "eligible": true,
+          "canonicalPath": "/usr/sbin/nft",
+          "device": 66305,
+          "inode": 23002,
+          "sameCanonicalTarget": true,
+          "sameDeviceAndInode": true,
+          "lookup": {
+            "command": "dpkg-query",
+            "exitCode": 0,
+            "exactOwnedPath": true
+          }
+        }
+      ],
+      "canonicalPath": "/usr/sbin/nft"
+    },
+    {
+      "tool": "ip",
+      "phase": "complete",
+      "status": "bound",
+      "ownershipAttempts": [
+        {
+          "path": "/usr/bin/ip",
+          "eligible": true,
+          "canonicalPath": "/usr/bin/ip",
+          "device": 66305,
+          "inode": 2069,
+          "sameCanonicalTarget": true,
+          "sameDeviceAndInode": true,
+          "lookup": {
+            "command": "dpkg-query",
+            "exitCode": 1,
+            "stdoutBytes": 0,
+            "stderrBytes": 55,
+            "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "stderrSha256": "df306723eebd09c4084e7fa3f4ef9e065248f0fc1bf2777fa37510eef0475564"
+          }
+        },
+        {
+          "path": "/bin/ip",
+          "eligible": true,
+          "canonicalPath": "/usr/bin/ip",
+          "device": 66305,
+          "inode": 2069,
+          "sameCanonicalTarget": true,
+          "sameDeviceAndInode": true,
+          "lookup": {
+            "command": "dpkg-query",
+            "exitCode": 0,
+            "exactOwnedPath": true
+          }
+        }
+      ],
+      "canonicalPath": "/usr/bin/ip"
+    }
+  ],
+  "hostTools": {
+    "nsenter": {
+      "version": "nsenter from util-linux 2.39.3",
+      "packageOwnership": {
+        "path": "/usr/bin/nsenter",
+        "packages": [
+          "util-linux"
+        ],
+        "record": "util-linux: /usr/bin/nsenter"
+      },
+      "packageVersions": "util-linux 2.39.3-9ubuntu6.6 util-linux 2.39.3-9ubuntu6.6",
+      "path": "/usr/bin/nsenter",
+      "sha256": "3354ee6a84a0c7b0a7d99fbe33333bc8e22749a29301fe5ffbfb99cc660271f2"
+    },
+    "nft": {
+      "version": "nftables v1.0.9 (Old Doc Yak #3)",
+      "packageOwnership": {
+        "path": "/usr/sbin/nft",
+        "packages": [
+          "nftables"
+        ],
+        "record": "nftables: /usr/sbin/nft"
+      },
+      "packageVersions": "nftables 1.0.9-1ubuntu0.1 nftables 1.0.9-1ubuntu0.1",
+      "path": "/usr/sbin/nft",
+      "sha256": "3f1c21553e62716ef1abfcf31f51ff94eb73ff4234a6653bac754a42f936d1c7"
+    },
+    "ip": {
+      "version": "ip utility, iproute2-6.1.0, libbpf 1.3.0",
+      "packageOwnership": {
+        "path": "/bin/ip",
+        "packages": [
+          "iproute2"
+        ],
+        "record": "iproute2: /bin/ip"
+      },
+      "packageVersions": "iproute2 6.1.0-1ubuntu6.4 iproute2 6.1.0-1ubuntu6.4",
+      "path": "/usr/bin/ip",
+      "sha256": "ea200fcc3a7bf723a8e0e2a21ceb3805324812fef36f6ba0552362a9a9e65f92"
+    }
+  },
+  "docker": {
+    "path": "/usr/bin/docker",
+    "sha256": "6435ff9214bf8e0931078fb0980809728cac0a54a526d4f28a26d3e48132b58d",
+    "version": "28.0.4\n",
+    "localRootfulDaemon": true,
+    "builtinSeccomp": true
+  },
+  "endpointPolicy": {
+    "schemaVersion": 1,
+    "head": "0820278c1cd38e6dd6a1ae38631889041bd6f9ba",
+    "payloadManifestSha256": "2b34bd97b9610342d294e00d30a4ecbe131528c17449a9679c1b1cd3ec2a6545",
+    "observedAtUtc": "2026-10-26T00:18:35.587468Z",
+    "expiresAtUtc": "2026-10-26T00:28:35.587468Z",
+    "hosts": {
+      "github.com": [
+        "140.82.113.3"
+      ],
+      "nodejs.org": [
+        "104.16.212.131",
+        "104.16.213.131"
+      ],
+      "registry.npmjs.org": [
+        "104.16.0.34",
+        "104.16.1.34",
+        "104.16.10.34",
+        "104.16.11.34",
+        "104.16.2.34",
+        "104.16.3.34",
+        "104.16.4.34",
+        "104.16.5.34",
+        "104.16.6.34",
+        "104.16.7.34",
+        "104.16.8.34",
+        "104.16.9.34"
+      ],
+      "registry.yarnpkg.com": [
+        "104.16.0.34",
+        "104.16.1.34",
+        "104.16.10.34",
+        "104.16.11.34",
+        "104.16.2.34",
+        "104.16.3.34",
+        "104.16.4.34",
+        "104.16.5.34",
+        "104.16.6.34",
+        "104.16.7.34",
+        "104.16.8.34",
+        "104.16.9.34"
+      ],
+      "release-assets.githubusercontent.com": [
+        "185.199.108.133",
+        "185.199.109.133",
+        "185.199.110.133",
+        "185.199.111.133"
+      ]
+    }
+  },
+  "ready": {
+    "event": "ready",
+    "nonce": "ad3a6aff0e3349fba2659389f2b8ac8e",
+    "uid": 1000,
+    "gid": 1000,
+    "accountUid": 1000,
+    "accountGid": 1000,
+    "accountHome": "/home/node",
+    "homeMatchesRealAccount": true,
+    "canaryRoundTrip": true,
+    "capInh": "0000000000000000",
+    "capPrm": "0000000000000000",
+    "capEff": "0000000000000000",
+    "capBnd": "0000000000000000",
+    "capAmb": "0000000000000000",
+    "noNewPrivs": "1",
+    "seccomp": "2",
+    "controlsSha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+    "unexpectedEnvironmentCount": 0,
+    "dockerSocketStat": "absent",
+    "nodeVersion": "24.21.0",
+    "platform": "linux",
+    "arch": "x64"
+  },
+  "lastNamespaceToolOperation": {
+    "argv": [
+      "/usr/bin/nsenter",
+      "--net=/proc/self/fd/6",
+      "--",
+      "/usr/sbin/nft",
+      "-j",
+      "-n",
+      "list",
+      "table",
+      "inet",
+      "pftl_lock_egress"
+    ],
+    "scope": "child-network-namespace",
+    "operation": "nft-owned-table",
+    "stdinBytes": 0,
+    "stdinSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "exitCode": 0,
+    "stdoutBytes": 6897,
+    "stderrBytes": 0,
+    "stdoutSha256": "3bb5f2b33881aa64be3f1ca4347b991a9ddcc25dc13cc807452f3a56d08f6c94",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "nftDiagnosticReadbacks": {
+    "nft-tables": {
+      "bytes": 183,
+      "sha256": "8abb5ae4cec2b20ebba33e2c283754e355a90f397bd0577d475179eb41acb153",
+      "captured": true,
+      "parsed": {
+        "nftables": [
+          {
+            "metainfo": {
+              "version": "1.0.9",
+              "release_name": "Old Doc Yak #3",
+              "json_schema_version": 1
+            }
+          },
+          {
+            "table": {
+              "family": "inet",
+              "name": "pftl_lock_egress",
+              "handle": 1
+            }
+          }
+        ]
+      }
+    },
+    "nft-owned-table": {
+      "bytes": 6897,
+      "sha256": "3bb5f2b33881aa64be3f1ca4347b991a9ddcc25dc13cc807452f3a56d08f6c94",
+      "captured": true,
+      "parsed": {
+        "nftables": [
+          {
+            "metainfo": {
+              "version": "1.0.9",
+              "release_name": "Old Doc Yak #3",
+              "json_schema_version": 1
+            }
+          },
+          {
+            "table": {
+              "family": "inet",
+              "name": "pftl_lock_egress",
+              "handle": 1
+            }
+          },
+          {
+            "chain": {
+              "family": "inet",
+              "table": "pftl_lock_egress",
+              "name": "output",
+              "handle": 1,
+              "type": "filter",
+              "hook": "output",
+              "prio": -300,
+              "policy": "drop"
+            }
+          },
+          {
+            "chain": {
+              "family": "inet",
+              "table": "pftl_lock_egress",
+              "name": "forward",
+              "handle": 2,
+              "type": "filter",
+              "hook": "forward",
+              "prio": -300,
+              "policy": "drop"
+            }
+          },
+          {
+            "rule": {
+              "family": "inet",
+              "table": "pftl_lock_egress",
+              "chain": "output",
+              "handle": 3,
+              "expr": [
+                {
+                  "match": {
+                    "op": "==",
+                    "left": {
+                      "payload": {
+                        "protocol": "ip",
+                        "field": "daddr"
+                      }
+                    },
+                    "right": "104.16.0.34"
+                  }
+                },
+                {
+                  "match": {
+                    "op": "==",
+                    "left": {
+                      "payload": {
+                        "protocol": "tcp",
+                        "field": "dport"
+                      }
+                    },
+                    "right": 443
+                  }
+                },
+                {
+                  "accept": null
+                }
+              ]
+            }
+          },
+          {
+            "rule": {
+              "family": "inet",
+              "table": "pftl_lock_egress",
+              "chain": "output",
+              "handle": 4,
+              "expr": [
+                {
+                  "match": {
+                    "op": "==",
+                    "left": {
+                      "payload": {
+                        "protocol": "ip",
+                        "field": "daddr"
+                      }
+                    },
+                    "right": "104.16.1.34"
+                  }
+                },
+                {
+                  "match": {
+                    "op": "==",
+                    "left": {
+                      "payload": {
+                        "protocol": "tcp",
+                        "field": "dport"
+                      }
+                    },
+                    "right": 443
+                  }
+                },
+                {
+                  "accept": null
+                }
+              ]
+            }
+          },
+          {
+            "rule": {
+              "family": "inet",
+              "table": "pftl_lock_egress",
+              "chain": "output",
+              "handle": 5,
+              "expr": [
+                {
+                  "match": {
+                    "op": "==",
+                    "left": {
+                      "payload": {
+                        "protocol": "ip",
+                        "field": "daddr"
+                      }
+                    },
+                    "right": "104.16.2.34"
+                  }
+                },
+                {
+                  "match": {
+                    "op": "==",
+                    "left": {
+                      "payload": {
+                        "protocol": "tcp",
+                        "field": "dport"
+                      }
+                    },
+                    "right": 443
+                  }
+                },
+                {
+                  "accept": null
+                }
+              ]
+            }
+          },
+          {
+            "rule": {
+              "family": "inet",
+              "table": "pftl_lock_egress",
+              "chain": "output",
+              "handle": 6,
+              "expr": [
+                {
+                  "match": {
+                    "op": "==",
+                    "left": {
+                      "payload": {
+                        "protocol": "ip",
+                        "field": "daddr"
+                      }
+                    },
+                    "right": "104.16.3.34"
+                  }
+                },
+                {
+                  "match": {
+                    "op": "==",
+                    "left": {
+                      "payload": {
+                        "protocol": "tcp",
+                        "field": "dport"
+                      }
+                    },
+                    "right": 443
+                  }
+                },
+                {
+                  "accept": null
+                }
+              ]
+            }
+          },
+          {
+            "rule": {
+              "family": "inet",
+              "table": "pftl_lock_egress",
+              "chain": "output",
+              "handle": 7,
+              "expr": [
+                {
+                  "match": {
+                    "op": "==",
+                    "left": {
+                      "payload": {
+                        "protocol": "ip",
+                        "field": "daddr"
+                      }
+                    },
+                    "right": "104.16.4.34"
+                  }
+                },
+                {
+                  "match": {
+                    "op": "==",
+                    "left": {
+                      "payload": {
+                        "protocol": "tcp",
+                        "field": "dport"
+                      }
+                    },
+                    "right": 443
+                  }
+                },
+                {
+                  "accept": null
+                }
+              ]
+            }
+          },
+          {
+            "rule": {
+              "family": "inet",
+              "table": "pftl_lock_egress",
+              "chain": "output",
+              "handle": 8,
+              "expr": [
+                {
+                  "match": {
+                    "op": "==",
+                    "left": {
+                      "payload": {
+                        "protocol": "ip",
+                        "field": "daddr"
+                      }
+                    },
+                    "right": "104.16.5.34"
+                  }
+                },
+                {
+                  "match": {
+                    "op": "==",
+                    "left": {
+                      "payload": {
+                        "protocol": "tcp",
+                        "field": "dport"
+                      }
+                    },
+                    "right": 443
+                  }
+                },
+                {
+                  "accept": null
+                }
+              ]
+            }
+          },
+          {
+            "rule": {
+              "family": "inet",
+              "table": "pftl_lock_egress",
+              "chain": "output",
+              "handle": 9,
+              "expr": [
+                {
+                  "match": {
+                    "op": "==",
+                    "left": {
+                      "payload": {
+                        "protocol": "ip",
+                        "field": "daddr"
+                      }
+                    },
+                    "right": "104.16.6.34"
+                  }
+                },
+                {
+                  "match": {
+                    "op": "==",
+                    "left": {
+                      "payload": {
+                        "protocol": "tcp",
+                        "field": "dport"
+                      }
+                    },
+                    "right": 443
+                  }
+                },
+                {
+                  "accept": null
+                }
+              ]
+            }
+          },
+          {
+            "rule": {
+              "family": "inet",
+              "table": "pftl_lock_egress",
+              "chain": "output",
+              "handle": 10,
+              "expr": [
+                {
+                  "match": {
+                    "op": "==",
+                    "left": {
+                      "payload": {
+                        "protocol": "ip",
+                        "field": "daddr"
+                      }
+                    },
+                    "right": "104.16.7.34"
+                  }
+                },
+                {
+                  "match": {
+                    "op": "==",
+                    "left": {
+                      "payload": {
+                        "protocol": "tcp",
+                        "field": "dport"
+                      }
+                    },
+                    "right": 443
+                  }
+                },
+                {
+                  "accept": null
+                }
+              ]
+            }
+          },
+          {
+            "rule": {
+              "family": "inet",
+              "table": "pftl_lock_egress",
+              "chain": "output",
+              "handle": 11,
+              "expr": [
+                {
+                  "match": {
+                    "op": "==",
+                    "left": {
+                      "payload": {
+                        "protocol": "ip",
+                        "field": "daddr"
+                      }
+                    },
+                    "right": "104.16.8.34"
+                  }
+                },
+                {
+                  "match": {
+                    "op": "==",
+                    "left": {
+                      "payload": {
+                        "protocol": "tcp",
+                        "field": "dport"
+                      }
+                    },
+                    "right": 443
+                  }
+                },
+                {
+                  "accept": null
+                }
+              ]
+            }
+          },
+          {
+            "rule": {
+              "family": "inet",
+              "table": "pftl_lock_egress",
+              "chain": "output",
+              "handle": 12,
+              "expr": [
+                {
+                  "match": {
+                    "op": "==",
+                    "left": {
+                      "payload": {
+                        "protocol": "ip",
+                        "field": "daddr"
+                      }
+                    },
+                    "right": "104.16.9.34"
+                  }
+                },
+                {
+                  "match": {
+                    "op": "==",
+                    "left": {
+                      "payload": {
+                        "protocol": "tcp",
+                        "field": "dport"
+                      }
+                    },
+                    "right": 443
+                  }
+                },
+                {
+                  "accept": null
+                }
+              ]
+            }
+          },
+          {
+            "rule": {
+              "family": "inet",
+              "table": "pftl_lock_egress",
+              "chain": "output",
+              "handle": 13,
+              "expr": [
+                {
+                  "match": {
+                    "op": "==",
+                    "left": {
+                      "payload": {
+                        "protocol": "ip",
+                        "field": "daddr"
+                      }
+                    },
+                    "right": "104.16.10.34"
+                  }
+                },
+                {
+                  "match": {
+                    "op": "==",
+                    "left": {
+                      "payload": {
+                        "protocol": "tcp",
+                        "field": "dport"
+                      }
+                    },
+                    "right": 443
+                  }
+                },
+                {
+                  "accept": null
+                }
+              ]
+            }
+          },
+          {
+            "rule": {
+              "family": "inet",
+              "table": "pftl_lock_egress",
+              "chain": "output",
+              "handle": 14,
+              "expr": [
+                {
+                  "match": {
+                    "op": "==",
+                    "left": {
+                      "payload": {
+                        "protocol": "ip",
+                        "field": "daddr"
+                      }
+                    },
+                    "right": "104.16.11.34"
+                  }
+                },
+                {
+                  "match": {
+                    "op": "==",
+                    "left": {
+                      "payload": {
+                        "protocol": "tcp",
+                        "field": "dport"
+                      }
+                    },
+                    "right": 443
+                  }
+                },
+                {
+                  "accept": null
+                }
+              ]
+            }
+          },
+          {
+            "rule": {
+              "family": "inet",
+              "table": "pftl_lock_egress",
+              "chain": "output",
+              "handle": 15,
+              "expr": [
+                {
+                  "match": {
+                    "op": "==",
+                    "left": {
+                      "payload": {
+                        "protocol": "ip",
+                        "field": "daddr"
+                      }
+                    },
+                    "right": "104.16.212.131"
+                  }
+                },
+                {
+                  "match": {
+                    "op": "==",
+                    "left": {
+                      "payload": {
+                        "protocol": "tcp",
+                        "field": "dport"
+                      }
+                    },
+                    "right": 443
+                  }
+                },
+                {
+                  "accept": null
+                }
+              ]
+            }
+          },
+          {
+            "rule": {
+              "family": "inet",
+              "table": "pftl_lock_egress",
+              "chain": "output",
+              "handle": 16,
+              "expr": [
+                {
+                  "match": {
+                    "op": "==",
+                    "left": {
+                      "payload": {
+                        "protocol": "ip",
+                        "field": "daddr"
+                      }
+                    },
+                    "right": "104.16.213.131"
+                  }
+                },
+                {
+                  "match": {
+                    "op": "==",
+                    "left": {
+                      "payload": {
+                        "protocol": "tcp",
+                        "field": "dport"
+                      }
+                    },
+                    "right": 443
+                  }
+                },
+                {
+                  "accept": null
+                }
+              ]
+            }
+          },
+          {
+            "rule": {
+              "family": "inet",
+              "table": "pftl_lock_egress",
+              "chain": "output",
+              "handle": 17,
+              "expr": [
+                {
+                  "match": {
+                    "op": "==",
+                    "left": {
+                      "payload": {
+                        "protocol": "ip",
+                        "field": "daddr"
+                      }
+                    },
+                    "right": "140.82.113.3"
+                  }
+                },
+                {
+                  "match": {
+                    "op": "==",
+                    "left": {
+                      "payload": {
+                        "protocol": "tcp",
+                        "field": "dport"
+                      }
+                    },
+                    "right": 443
+                  }
+                },
+                {
+                  "accept": null
+                }
+              ]
+            }
+          },
+          {
+            "rule": {
+              "family": "inet",
+              "table": "pftl_lock_egress",
+              "chain": "output",
+              "handle": 18,
+              "expr": [
+                {
+                  "match": {
+                    "op": "==",
+                    "left": {
+                      "payload": {
+                        "protocol": "ip",
+                        "field": "daddr"
+                      }
+                    },
+                    "right": "185.199.108.133"
+                  }
+                },
+                {
+                  "match": {
+                    "op": "==",
+                    "left": {
+                      "payload": {
+                        "protocol": "tcp",
+                        "field": "dport"
+                      }
+                    },
+                    "right": 443
+                  }
+                },
+                {
+                  "accept": null
+                }
+              ]
+            }
+          },
+          {
+            "rule": {
+              "family": "inet",
+              "table": "pftl_lock_egress",
+              "chain": "output",
+              "handle": 19,
+              "expr": [
+                {
+                  "match": {
+                    "op": "==",
+                    "left": {
+                      "payload": {
+                        "protocol": "ip",
+                        "field": "daddr"
+                      }
+                    },
+                    "right": "185.199.109.133"
+                  }
+                },
+                {
+                  "match": {
+                    "op": "==",
+                    "left": {
+                      "payload": {
+                        "protocol": "tcp",
+                        "field": "dport"
+                      }
+                    },
+                    "right": 443
+                  }
+                },
+                {
+                  "accept": null
+                }
+              ]
+            }
+          },
+          {
+            "rule": {
+              "family": "inet",
+              "table": "pftl_lock_egress",
+              "chain": "output",
+              "handle": 20,
+              "expr": [
+                {
+                  "match": {
+                    "op": "==",
+                    "left": {
+                      "payload": {
+                        "protocol": "ip",
+                        "field": "daddr"
+                      }
+                    },
+                    "right": "185.199.110.133"
+                  }
+                },
+                {
+                  "match": {
+                    "op": "==",
+                    "left": {
+                      "payload": {
+                        "protocol": "tcp",
+                        "field": "dport"
+                      }
+                    },
+                    "right": 443
+                  }
+                },
+                {
+                  "accept": null
+                }
+              ]
+            }
+          },
+          {
+            "rule": {
+              "family": "inet",
+              "table": "pftl_lock_egress",
+              "chain": "output",
+              "handle": 21,
+              "expr": [
+                {
+                  "match": {
+                    "op": "==",
+                    "left": {
+                      "payload": {
+                        "protocol": "ip",
+                        "field": "daddr"
+                      }
+                    },
+                    "right": "185.199.111.133"
+                  }
+                },
+                {
+                  "match": {
+                    "op": "==",
+                    "left": {
+                      "payload": {
+                        "protocol": "tcp",
+                        "field": "dport"
+                      }
+                    },
+                    "right": 443
+                  }
+                },
+                {
+                  "accept": null
+                }
+              ]
+            }
+          },
+          {
+            "rule": {
+              "family": "inet",
+              "table": "pftl_lock_egress",
+              "chain": "output",
+              "handle": 22,
+              "expr": [
+                {
+                  "counter": {
+                    "packets": 20,
+                    "bytes": 1268
+                  }
+                },
+                {
+                  "drop": null
+                }
+              ]
+            }
+          }
+        ]
+      }
+    }
+  },
+  "filterInstall": {
+    "exactReadback": true,
+    "readbackRepresentation": "typed-payload-protocol-canonical",
+    "outputPriority": -300,
+    "ipv4DefaultDrop": true,
+    "ipv6DefaultDrop": true,
+    "dnsPermitted": false,
+    "tcpDestinationPort": 443,
+    "addresses": [
+      "104.16.0.34",
+      "104.16.1.34",
+      "104.16.2.34",
+      "104.16.3.34",
+      "104.16.4.34",
+      "104.16.5.34",
+      "104.16.6.34",
+      "104.16.7.34",
+      "104.16.8.34",
+      "104.16.9.34",
+      "104.16.10.34",
+      "104.16.11.34",
+      "104.16.212.131",
+      "104.16.213.131",
+      "140.82.113.3",
+      "185.199.108.133",
+      "185.199.109.133",
+      "185.199.110.133",
+      "185.199.111.133"
+    ],
+    "table": "pftl_lock_egress",
+    "outputDropCounter": {
+      "packets": 0,
+      "bytes": 0
+    },
+    "batchSha256": "3672d7b0f5547633c0c53ca444e5bd20ab762203088e1ceecf988bbedc48fb48",
+    "hostAndContainerLocalAndGatewayAddressesExcluded": [
+      "10.1.0.1",
+      "10.1.0.194",
+      "127.0.0.1",
+      "172.17.0.1",
+      "172.17.0.2",
+      "::1",
+      "fe80::222:48ff:fea5:118",
+      "fe80::301f:d8ff:fef9:e33d",
+      "fe80::90b6:7eff:fed9:efff"
+    ],
+    "namespaceEntry": "network-only-held-fd",
+    "sourceCommandExecuted": false,
+    "releaseAuthorized": false
+  },
+  "ipv6LoopbackRoutePresent": true,
+  "finalCounter": {
+    "packets": 20,
+    "bytes": 1268
+  },
+  "workloadStderr": {
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "elapsedPhaseSeconds": 18.01,
+  "confinementQualified": true
+}
