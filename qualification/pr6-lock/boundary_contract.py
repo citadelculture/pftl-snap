@@ -5,7 +5,7 @@ import json
 import re
 
 IMAGE = "node@sha256:51b1100cc2a83d370c6a60952e3f2989c8a43159d0e38586e090f3b3326efefd"
-HELPERS = {"egress_policy.py": "658b442c5cb48d9cb29c3dcca50c6206bab9076e439f4702c06dca484313f988",
+HELPERS = {"egress_policy.py": "082262d5c3dd69a9411978225e94212ac83049f01417649dc92ca4cbdf0fad9c",
            "namespace_filter.py": "139e87b4851ed8e18e09c29fa4b499f397c6d5b7a91a0a04e6420593a699be3e"}
 PHASE_SECONDS = 150
 MAX_OUTPUT = 1024 * 1024

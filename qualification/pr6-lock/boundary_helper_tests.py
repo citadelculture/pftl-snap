@@ -290,6 +290,91 @@ class BoundedTrustedDiagnostics(unittest.TestCase):
                 record_namespace_result(report,operation,b'{"nftables":[]}',b'',0)
         self.assertEqual(set(report["nftDiagnosticReadbacks"]),{"nft-tables","nft-owned-table"})
 
+class ExactReadbackCompatibility(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        raw=(Path(__file__).resolve().parent/"fixtures/nft-1.0.9-captured-readback.json").read_bytes()
+        if hashlib.sha256(raw).hexdigest()!="cf403d3de5e8187ee61633b272c1324e563d887b5e5ecab9a24349731bf2cc43":
+            raise AssertionError("Captured fixture byte pin mismatch")
+        cls.fixture=json.loads(raw)
+    def forms(self):
+        canonical=copy.deepcopy(self.fixture["readback"])
+        explicit=copy.deepcopy(canonical)
+        for item in explicit["nftables"]:
+            rule=item.get("rule")
+            if rule and rule["expr"][-1]=={"accept":None}:
+                rule["expr"][:0]=[
+                    {"match":{"op":"==","left":{"meta":{"key":"nfproto"}},"right":"ipv4"}},
+                    {"match":{"op":"==","left":{"meta":{"key":"l4proto"}},"right":"tcp"}}]
+        return {"typed-payload-protocol-canonical":canonical,"explicit-protocol-guards":explicit}
+    def payload(self, document, field):
+        return next(expression["match"] for expression in document["nftables"][4]["rule"]["expr"]
+                    if expression.get("match",{}).get("left",{}).get("payload",{}).get("field")==field)
+    def assert_mutations_refuse(self, mutations):
+        for representation,original in self.forms().items():
+            for label,mutate in mutations.items():
+                document=copy.deepcopy(original);mutate(document)
+                with self.subTest(representation=representation,mutation=label),self.assertRaises(TrustedPolicyRefusal):
+                    verify_policy_readback(document,tuple(self.fixture["addresses"]))
+    def test_actual_captured_readback_is_pure_replay_not_runtime_qualification(self):
+        self.assertEqual(self.fixture["origin"]["runId"],40248118244)
+        self.assertEqual(self.fixture["origin"]["reportSha256"],"b528a85c7d20333923bea5531bbf65b973919dc718cb56130058ffffd37869c4")
+        self.assertEqual(self.fixture["origin"]["rawNftStdoutSha256"],"4795e97f2fab5cd64384268f477ffebd25df1a37e0c963510c0caf8c6691eed3")
+        self.assertEqual(self.fixture["origin"]["actualNetworkProbeCount"],0)
+        self.assertIs(self.fixture["origin"]["actualRuntimeConfinementQualified"],False)
+        result=verify_policy_readback(self.fixture["readback"],tuple(self.fixture["addresses"]))
+        self.assertEqual(result["readbackRepresentation"],"typed-payload-protocol-canonical")
+        self.assertEqual(result["outputDropCounter"],{"packets":0,"bytes":0})
+    def test_exact_whole_explicit_and_typed_payload_forms_are_accepted(self):
+        for name,document in self.forms().items():
+            self.assertEqual(verify_policy_readback(document,tuple(self.fixture["addresses"]))["readbackRepresentation"],name)
+    def test_udp_ipv6_raw_payload_wrong_port_address_field_and_operator_refuse(self):
+        self.assert_mutations_refuse({
+            "udp":lambda d:self.payload(d,"dport")["left"]["payload"].update(protocol="udp"),
+            "ipv6":lambda d:self.payload(d,"daddr")["left"]["payload"].update(protocol="ip6"),
+            "raw-payload":lambda d:self.payload(d,"daddr").update(left={"payload":{"base":"network header","offset":16,"len":32}}),
+            "wrong-port":lambda d:self.payload(d,"dport").update(right=80),
+            "wrong-address":lambda d:self.payload(d,"daddr").update(right="1.1.1.1"),
+            "wrong-field":lambda d:self.payload(d,"daddr")["left"]["payload"].update(field="saddr"),
+            "wrong-operator":lambda d:self.payload(d,"dport").update(op="!=")})
+    def test_rule_match_order_extra_or_missing_accept_and_early_drop_refuse(self):
+        def reorder_matches(d):
+            expr=d["nftables"][4]["rule"]["expr"];expr[-3],expr[-2]=expr[-2],expr[-3]
+        def reorder_rules(d): d["nftables"][4],d["nftables"][5]=d["nftables"][5],d["nftables"][4]
+        def early_drop(d): d["nftables"].insert(4,d["nftables"].pop())
+        self.assert_mutations_refuse({"match-order":reorder_matches,"rule-order":reorder_rules,
+            "extra-rule":lambda d:d["nftables"].insert(-1,copy.deepcopy(d["nftables"][4])),
+            "missing-rule":lambda d:d["nftables"].pop(4),"early-drop":early_drop,
+            "missing-address-match":lambda d:d["nftables"][4]["rule"]["expr"].remove({"match":self.payload(d,"daddr")})})
+    def test_missing_duplicate_or_invalid_counters_refuse(self):
+        self.assert_mutations_refuse({
+            "missing-counter":lambda d:d["nftables"][-1]["rule"]["expr"].pop(0),
+            "duplicate-counter":lambda d:d["nftables"][-1]["rule"]["expr"].insert(0,{"counter":{"packets":0,"bytes":0}}),
+            "negative-counter":lambda d:d["nftables"][-1]["rule"]["expr"][0]["counter"].update(packets=-1),
+            "boolean-counter":lambda d:d["nftables"][-1]["rule"]["expr"][0]["counter"].update(bytes=True),
+            "extra-counter-field":lambda d:d["nftables"][-1]["rule"]["expr"][0]["counter"].update(extra=1)})
+    def test_hooks_priority_policy_family_and_schema_remain_exact(self):
+        self.assert_mutations_refuse({
+            "output-hook":lambda d:d["nftables"][2]["chain"].update(hook="input"),
+            "forward-hook":lambda d:d["nftables"][3]["chain"].update(hook="input"),
+            "priority":lambda d:d["nftables"][2]["chain"].update(prio=0),
+            "output-policy":lambda d:d["nftables"][2]["chain"].update(policy="accept"),
+            "forward-policy":lambda d:d["nftables"][3]["chain"].update(policy="accept"),
+            "table-family":lambda d:d["nftables"][1]["table"].update(family="ip"),
+            "schema":lambda d:d["nftables"][0]["metainfo"].update(json_schema_version=2)})
+    def test_partial_guards_and_mixed_rule_representations_refuse(self):
+        explicit=self.forms()["explicit-protocol-guards"]
+        for pattern in ("only-nfproto","only-l4proto","one-explicit-rule"):
+            document=copy.deepcopy(self.fixture["readback"])
+            for index,item in enumerate(document["nftables"]):
+                if "rule" not in item or item["rule"]["expr"][-1]!={"accept":None}: continue
+                guards=copy.deepcopy(explicit["nftables"][index]["rule"]["expr"][:2])
+                if pattern=="only-nfproto": item["rule"]["expr"][:0]=guards[:1]
+                elif pattern=="only-l4proto": item["rule"]["expr"][:0]=guards[1:]
+                elif index==4: item["rule"]["expr"][:0]=guards
+            with self.subTest(pattern=pattern),self.assertRaises(TrustedPolicyRefusal):
+                verify_policy_readback(document,tuple(self.fixture["addresses"]))
+
 if __name__ == "__main__":
     if sys.argv[1:] == ["--check-current-environment"]:
         check_environment(os.environ)

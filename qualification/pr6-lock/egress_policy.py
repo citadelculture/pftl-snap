@@ -120,6 +120,20 @@ def expected_objects(addresses):
 def compile_rules(addresses):
     return {"nftables": [{"add": item} for item in expected_objects(addresses)]}
 
+def payload_protocol_readback_objects(addresses):
+    # nft may omit redundant meta guards when typed ip/tcp payload expressions
+    # retain those protocol dependencies. This is one complete expected tree;
+    # no predicate is removed from the actual readback or compiled input.
+    explicit = expected_objects(addresses)
+    objects = explicit[:3]
+    for value in addresses:
+        objects.append({"rule": {"family": "inet", "table": TABLE, "chain": "output", "expr": [
+            match({"payload": {"protocol": "ip", "field": "daddr"}}, value),
+            match({"payload": {"protocol": "tcp", "field": "dport"}}, 443),
+            {"accept": None}]}})
+    objects.append(explicit[-1])
+    return objects
+
 def verify_readback(document, addresses):
     exact_keys(document, {"nftables"})
     if not isinstance(document["nftables"], list):
@@ -156,12 +170,14 @@ def verify_readback(document, addresses):
         actual.append({kind: cleaned})
     # nft lists rules beside their chain; compare object classes separately while
     # retaining the exact rule order. No reordering can hide an earlier accept.
-    expected = expected_objects(addresses)
-    same = all([item for item in actual if kind in item] == [item for item in expected if kind in item]
-               for kind in ("table", "chain", "rule"))
-    if not metadata_seen or not same or drop_counter is None:
+    representations = (("explicit-protocol-guards", expected_objects(addresses)),
+                       ("typed-payload-protocol-canonical", payload_protocol_readback_objects(addresses)))
+    representation = next((name for name, expected in representations
+                           if all([item for item in actual if kind in item] == [item for item in expected if kind in item]
+                                  for kind in ("table", "chain", "rule"))), None)
+    if not metadata_seen or representation is None or drop_counter is None:
         raise Refusal("Kernel readback does not equal exact compiled policy")
-    return {"exactReadback": True, "outputPriority": -300, "ipv4DefaultDrop": True,
+    return {"exactReadback": True, "readbackRepresentation": representation, "outputPriority": -300, "ipv4DefaultDrop": True,
             "ipv6DefaultDrop": True, "dnsPermitted": False, "tcpDestinationPort": 443,
             "addresses": list(addresses), "table": TABLE, "outputDropCounter": drop_counter}
 
