@@ -1,4 +1,4 @@
-name: PR6 bounded original-hook install qualification
+name: PR6 bounded original-hook qualification
 on:
   workflow_dispatch:
 permissions:
@@ -9,7 +9,7 @@ concurrency:
 jobs:
   install:
     # Separate from the published boundary workflow. No repository settings or
-    # workflow state is changed by this source packet. Exact admission is pinned below.
+    # workflow state is changed by publication; dispatch is separately reviewed.
     if: github.repository == 'citadelculture/pftl-snap'
     runs-on: ubuntu-24.04
     timeout-minutes: 40
@@ -43,7 +43,7 @@ jobs:
             sudo -n apt-get install --yes --no-install-recommends nftables
           fi
       - name: Require actual proof and run separately admitted original hook
-        # Exact admission, actual boundary proof and expiry are rechecked before package execution.
+        # Exact expiring admission and SHA are required before each phase.
         # Only host nftables may be provisioned above. No child tool/compiler setup.
         run: >-
           /usr/bin/python3 -I control/qualification/pr6-lock/run-hosted-lock.py

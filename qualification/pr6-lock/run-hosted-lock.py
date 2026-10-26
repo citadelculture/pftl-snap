@@ -15,7 +15,7 @@ import time
 import uuid
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from egress_policy import Refusal, hosts_text, utc, validate_policy, refuse_proxy_controls, refuse_docker_controls
-from namespace_filter import pinned_json
+from namespace_filter import pinned_json, unique_json
 from boundary_contract import HELPERS, check_environment
 from install_contract import install_admission, phase_admission
 from prepare_phase import canonical_elf, prepare_phase
@@ -28,10 +28,11 @@ TREE = "2d6666aba60dbd00d912034cc2d4def5200ceac9"
 IMAGE = "node@sha256:51b1100cc2a83d370c6a60952e3f2989c8a43159d0e38586e090f3b3326efefd"
 RESERVE = 4 * 1024**3
 OUTPUT_LIMIT = 16 * 1024**2
-PREPARATION_ONLY = False  # Exact proof/native/resource admission bound in this reviewed runtime candidate.
-FULL_INSTALL_ADMITTED = True  # Requires pinned expiring admission and separate normal-reviewed dispatch.
+PREPARATION_ONLY = False  # Exact reviewed runtime packet; expiring admission is still mandatory.
+FULL_INSTALL_ADMITTED = True  # Bounded admitted runtime, independent from historical boundary proof.
 DOCKER_PREFIX = None
 DOCKER_BINDING = None
+GATE_INSPECTOR_SHA256 = "275393a94614898f40f21b5b1cadccc9545813ea5bb936a862664bcf21aa58e3"
 
 def sha(path):
     return hashlib.sha256(path.read_bytes()).hexdigest()
@@ -85,6 +86,30 @@ def verify_local_gate(pid, phase, nonce):
     status = (path / "status").read_text()
     if not re.search(r"^Uid:\s+1000\s+1000\s+1000\s+1000$", status, re.MULTILINE):
         raise ValueError("Local gate UID differs from image account")
+
+def inspect_gate_namespace(pid, phase, nonce):
+    inspector = HERE / "inspect-gate-namespace.py"
+    if not regular(inspector) or sha(inspector) != GATE_INSPECTOR_SHA256:
+        raise ValueError("Read-only gate inspector source pin mismatch")
+    observed = command(["sudo", "-n", "/usr/bin/python3", "-I", str(inspector),
+                        "--pid", str(pid), "--phase", phase, "--nonce", nonce], timeout=15)
+    if len(observed.stdout.encode()) > 65536 or sha(inspector) != GATE_INSPECTOR_SHA256:
+        raise ValueError("Gate inspection output bound or source pin changed")
+    identity = unique_json(observed.stdout)
+    required = {"schemaVersion", "kind", "pid", "phase", "nonce", "uid", "startTimeTicks",
+                "commandlineMatched", "namespaceDevice", "namespaceInode", "heldNamespaceFdClosed",
+                "hostNamespaceRefused", "readOnlyInspection", "namespaceEntered", "sourceCommandExecuted"}
+    if (not isinstance(identity, dict) or set(identity) != required
+            or identity["schemaVersion"] != 1 or identity["kind"] != "owned-gate-network-namespace-identity"
+            or identity["pid"] != pid or identity["phase"] != phase or identity["nonce"] != nonce
+            or identity["uid"] != 1000 or type(identity["pid"]) is not int
+            or type(identity["startTimeTicks"]) is not int or identity["startTimeTicks"] <= 0
+            or type(identity["namespaceDevice"]) is not int or identity["namespaceDevice"] < 0
+            or type(identity["namespaceInode"]) is not int or identity["namespaceInode"] <= 0
+            or any(identity[name] is not True for name in ("commandlineMatched", "heldNamespaceFdClosed", "hostNamespaceRefused", "readOnlyInspection"))
+            or identity["namespaceEntered"] is not False or identity["sourceCommandExecuted"] is not False):
+        raise ValueError("Exact read-only gate namespace identity receipt required")
+    return {**identity, "inspectorSha256": GATE_INSPECTOR_SHA256}
 
 def write_json(path, value):
     path.write_text(json.dumps(value, indent=2) + "\n")
@@ -362,11 +387,12 @@ def main():
                     raise ValueError("No live trusted wait gate")
                 pid = running["State"]["Pid"]
                 verify_local_gate(pid, phase, nonce)
-                netns = os.stat(f"/proc/{pid}/ns/net")
+                netns = inspect_gate_namespace(pid, phase, nonce)
+                write_json(outputs / (phase + "-namespace-identity.json"), netns)
                 receipt_path = outputs / (phase + "-filter.json")
                 helper = ["sudo", "-n", "/usr/bin/python3", "-B", str(HERE / "namespace_filter.py"),
-                          "--pid", str(pid), "--namespace-dev", str(netns.st_dev),
-                          "--namespace-inode", str(netns.st_ino),
+                          "--pid", str(pid), "--namespace-dev", str(netns["namespaceDevice"]),
+                          "--namespace-inode", str(netns["namespaceInode"]),
                           "--policy", str(policy_path.resolve()),
                           "--policy-sha256", policy_sha,
                           "--tools", str(tools_path.resolve()), "--tools-sha256", tools_sha,
@@ -375,8 +401,8 @@ def main():
                 receipt = json.loads(receipt_path.read_text())
                 after = json.loads(command(["docker", "inspect", name]).stdout)[0]
                 if (after["Id"] != running["Id"] or not after["State"]["Running"] or after["State"]["Pid"] != pid
-                        or receipt.get("pid") != pid or receipt.get("namespaceDevice") != netns.st_dev
-                        or receipt.get("namespaceInode") != netns.st_ino or receipt.get("exactReadback") is not True
+                        or receipt.get("pid") != pid or receipt.get("namespaceDevice") != netns["namespaceDevice"]
+                        or receipt.get("namespaceInode") != netns["namespaceInode"] or receipt.get("exactReadback") is not True
                         or receipt.get("policySha256") != policy_sha
                         or receipt.get("toolsSha256") != tools_sha):
                     raise ValueError("Filter/container identity binding failed")
