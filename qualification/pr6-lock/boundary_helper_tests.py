@@ -16,7 +16,10 @@ from boundary_contract import (Refusal, assess_probe, check_environment, child_e
                                controls_sha, probe_plan)
 import boundary_host
 from boundary_host import (CommandFailure, alias_identity, bind_tools, package_aliases,
-                           package_ownership, validate_container, validate_ready)
+                           package_ownership, validate_container, validate_ready,
+                           failure_label, namespace_operation, nft_diagnostic, record_namespace_result)
+from egress_policy import Refusal as TrustedPolicyRefusal
+from egress_policy import verify_readback as verify_policy_readback
 
 NONCE = "a" * 32
 ID = "b" * 64
@@ -195,6 +198,97 @@ class ProtectedPackageAliases(unittest.TestCase):
         self.assertEqual(progress[0]["tool"],"nsenter")
         self.assertEqual(progress[0]["phase"],"package-ownership")
         self.assertEqual(progress[0]["status"],"failed")
+
+class BoundedTrustedDiagnostics(unittest.TestCase):
+    paths={"nsenter":"/usr/bin/nsenter","nft":"/usr/sbin/nft","ip":"/usr/bin/ip"}
+    prefix=["/usr/bin/nsenter","--net=/proc/self/fd/7","--"]
+    def test_distinct_pinned_helper_refusal_survives_without_class_name_confusion(self):
+        error=TrustedPolicyRefusal("Unexpected existing tables; no unknown NAT/filter coexistence or replacement")
+        self.assertIsNot(type(error), Refusal)
+        self.assertEqual(failure_label(error,(TrustedPolicyRefusal,)),str(error))
+        self.assertEqual(failure_label(error),"Refusal")
+    def test_unrelated_same_name_and_subclasses_never_leak_error_text(self):
+        OtherRefusal=type("Refusal",(ValueError,),{})
+        Derived=type("Derived",(TrustedPolicyRefusal,),{})
+        for error in (RuntimeError("SYNTHETIC_SECRET /home/private"),OtherRefusal("SYNTHETIC_SECRET"),Derived("SYNTHETIC_SECRET")):
+            self.assertNotIn("SYNTHETIC_SECRET",failure_label(error,(TrustedPolicyRefusal,)))
+        self.assertNotIn("\n",failure_label(TrustedPolicyRefusal("unsafe\nmessage"),(TrustedPolicyRefusal,)))
+        self.assertLess(len(failure_label(TrustedPolicyRefusal("x"*513),(TrustedPolicyRefusal,))),513)
+    def test_exact_host_and_child_operations_are_captured_without_output(self):
+        host=namespace_operation([self.paths["ip"],"-j","address","show"],None,self.paths,7)
+        child=namespace_operation(self.prefix+[self.paths["nft"],"-j","-n","list","tables"],None,self.paths,7)
+        self.assertEqual(host["scope"],"host")
+        self.assertEqual(host["operation"],"interface-inventory")
+        self.assertEqual(child["argv"],self.prefix+[self.paths["nft"],"-j","-n","list","tables"])
+        self.assertEqual(child["operation"],"nft-tables")
+    def test_unknown_commands_other_namespace_fd_and_stdin_bounds_refuse(self):
+        invalid=[([self.paths["nft"],"-j","-n","list","tables"],None),
+                 ([self.paths["ip"],"-j","address","show","/home/private"],None),
+                 ([self.paths["nsenter"],"--net=/proc/self/fd/8","--",self.paths["ip"],"-j","address","show"],None),
+                 (self.prefix+[self.paths["nft"],"-j","-f","-"],"x"*(1024**2+1)),
+                 ([self.paths["ip"],"-j","address","show"],"unexpected input")]
+        for command,data in invalid:
+            with self.subTest(command=command),self.assertRaises(Refusal): namespace_operation(command,data,self.paths,7)
+    def test_bounded_nft_json_is_preserved_as_parsed_structure(self):
+        document={"nftables":[{"metainfo":{"json_schema_version":1}},{"table":{"family":"inet","name":"pftl_lock_egress","handle":3}}]}
+        result=nft_diagnostic(json.dumps(document).encode())
+        self.assertTrue(result["captured"])
+        self.assertEqual(result["parsed"],document)
+    def test_full_owned_rule_readback_preserves_meta_keys_and_actual_counter_shape(self):
+        document={"nftables":[
+            {"metainfo":{"version":"1.0.9","release_name":"Old Doc Yak #3","json_schema_version":1}},
+            {"table":{"family":"inet","name":"pftl_lock_egress","handle":1}},
+            {"chain":{"family":"inet","table":"pftl_lock_egress","name":"output","type":"filter",
+                      "hook":"output","prio":-300,"policy":"drop","handle":2}},
+            {"chain":{"family":"inet","table":"pftl_lock_egress","name":"forward","type":"filter",
+                      "hook":"forward","prio":-300,"policy":"drop","handle":3}},
+            {"rule":{"family":"inet","table":"pftl_lock_egress","chain":"output","handle":4,"expr":[
+                {"match":{"op":"==","left":{"meta":{"key":"nfproto"}},"right":"ipv4"}},
+                {"match":{"op":"==","left":{"meta":{"key":"l4proto"}},"right":"tcp"}},
+                {"match":{"op":"==","left":{"payload":{"protocol":"ip","field":"daddr"}},"right":"1.1.1.1"}},
+                {"match":{"op":"==","left":{"payload":{"protocol":"tcp","field":"dport"}},"right":443}},
+                {"accept":None}]}},
+            {"rule":{"family":"inet","table":"pftl_lock_egress","chain":"output","handle":5,
+                     "expr":[{"counter":{"packets":13,"bytes":832}},{"drop":None}]}}
+        ]}
+        # Independent literal fixture must also satisfy the unchanged policy verifier.
+        verified=verify_policy_readback(document,("1.1.1.1",))
+        self.assertTrue(verified["exactReadback"])
+        self.assertEqual(verified["outputDropCounter"],{"packets":13,"bytes":832})
+        diagnostic=nft_diagnostic(json.dumps(document).encode())
+        self.assertTrue(diagnostic["captured"])
+        self.assertEqual(diagnostic["parsed"],document)
+        for key,value in (("unknown", "synthetic"),("comment", "/home/private")):
+            changed=copy.deepcopy(document);changed["nftables"][4]["rule"][key]=value
+            refused=nft_diagnostic(json.dumps(changed).encode())
+            self.assertFalse(refused["captured"])
+            self.assertNotIn("parsed",refused)
+    def test_large_duplicate_deep_and_private_shaped_nft_outputs_are_hash_only(self):
+        deeply_nested=[];cursor=deeply_nested
+        for _ in range(18): child=[];cursor.append(child);cursor=child
+        outputs=[b"x"*65537,b'{"nftables":[],"nftables":[]}',b'{"nftables":[{"table":{"name":"/home/private"}}]}',
+                 b'{"nftables":[{"comment":"SYNTHETIC_SECRET"}]}',json.dumps({"nftables":deeply_nested}).encode(),
+                 json.dumps({"nftables":[None]*4100}).encode()]
+        for output in outputs:
+            result=nft_diagnostic(output)
+            self.assertFalse(result["captured"])
+            self.assertNotIn("parsed",result)
+            self.assertNotIn("SYNTHETIC_SECRET",json.dumps(result))
+            self.assertEqual(result["sha256"],hashlib.sha256(output).hexdigest())
+    def test_interface_route_and_stderr_payloads_never_enter_report(self):
+        report={}
+        op=namespace_operation([self.paths["ip"],"-j","address","show"],None,self.paths,7)
+        record_namespace_result(report,op,b'SYNTHETIC_INTERFACE_DATA',b'SYNTHETIC_STDERR /home/private',1)
+        self.assertNotIn("nftDiagnosticReadbacks",report)
+        self.assertNotIn("SYNTHETIC",json.dumps({"report":report,"operation":op}))
+        self.assertEqual(op["exitCode"],1)
+    def test_only_two_latest_nft_snapshots_are_retained(self):
+        report={}
+        for _ in range(4):
+            for suffix in (["tables"],["table","inet","pftl_lock_egress"]):
+                operation=namespace_operation(self.prefix+[self.paths["nft"],"-j","-n","list",*suffix],None,self.paths,7)
+                record_namespace_result(report,operation,b'{"nftables":[]}',b'',0)
+        self.assertEqual(set(report["nftDiagnosticReadbacks"]),{"nft-tables","nft-owned-table"})
 
 if __name__ == "__main__":
     if sys.argv[1:] == ["--check-current-environment"]:

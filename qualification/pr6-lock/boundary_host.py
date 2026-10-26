@@ -30,6 +30,81 @@ OWNER_LABEL = "org.postfiat.boundary.nonce"
 def digest(path):
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
+def failure_label(error, trusted_refusals=()):
+    # Helper exception identity is admitted only after its frozen bytes verify.
+    if type(error) in (Refusal, CommandFailure, *trusted_refusals):
+        message = str(error)
+        if len(message) <= 512 and all(32 <= ord(char) < 127 for char in message):
+            return message
+        return "Trusted refusal message exceeded safe diagnostic shape"
+    return type(error).__name__
+
+def namespace_operation(argv, data, paths, fd):
+    prefix = [paths["nsenter"], "--net=/proc/self/fd/" + str(fd), "--"]
+    child = argv[:3] == prefix
+    command = argv[3:] if child else argv
+    operations = {
+        tuple([paths["ip"], "-j", "address", "show"]): "interface-inventory",
+        **{tuple([paths["ip"], "-j", family, "route", "show", "table", "all"]): "route-inventory" for family in ("-4", "-6")},
+    }
+    if child:
+        operations.update({
+            (paths["nft"], "-j", "-n", "list", "tables"): "nft-tables",
+            (paths["nft"], "-j", "-n", "list", "table", "inet", "pftl_lock_egress"): "nft-owned-table",
+            (paths["nft"], "-j", "-f", "-"): "nft-install",
+        })
+    kind = operations.get(tuple(command))
+    if kind is None or len(argv) > 12 or any(not isinstance(arg, str) or len(arg) > 128 for arg in argv):
+        raise Refusal("Namespace diagnostic operation is outside fixed tool command set")
+    encoded = b"" if data is None else data.encode()
+    if (kind == "nft-install") != (data is not None) or len(encoded) > MAX_OUTPUT:
+        raise Refusal("Namespace diagnostic stdin shape or bound exceeded")
+    return {"argv": list(argv), "scope": "child-network-namespace" if child else "host",
+            "operation": kind, "stdinBytes": len(encoded),
+            "stdinSha256": hashlib.sha256(encoded).hexdigest()}
+
+def nft_diagnostic(data):
+    evidence = {"bytes": len(data), "sha256": hashlib.sha256(data).hexdigest(), "captured": False}
+    if len(data) > 65536:
+        return {**evidence, "reason": "nft-diagnostic-byte-bound"}
+    keys = {"nftables", "metainfo", "version", "release_name", "json_schema_version", "table", "family", "name", "handle",
+            "chain", "type", "hook", "prio", "policy", "rule", "expr", "match", "op", "left", "right", "payload",
+            "protocol", "field", "set", "accept", "counter", "packets", "bytes", "drop", "meta", "key"}
+    remaining = [4096]
+    def inspect(value, depth=0):
+        remaining[0] -= 1
+        if remaining[0] < 0 or depth > 16:
+            raise ValueError()
+        if isinstance(value, dict):
+            if not set(value) <= keys: raise ValueError()
+            for item in value.values(): inspect(item, depth+1)
+        elif isinstance(value, list):
+            for item in value: inspect(item, depth+1)
+        elif isinstance(value, str):
+            if len(value) > 128 or any(ord(char) < 32 or ord(char) >= 127 or char in "/\\" for char in value): raise ValueError()
+        elif value is not None and type(value) not in (bool, int):
+            raise ValueError()
+    try:
+        def pairs(items):
+            result = {}
+            for key, value in items:
+                if key in result: raise ValueError()
+                result[key] = value
+            return result
+        document = json.loads(data, object_pairs_hook=pairs)
+        if not isinstance(document, dict) or set(document) != {"nftables"} or not isinstance(document["nftables"], list): raise ValueError()
+        inspect(document)
+    except (ValueError, TypeError, UnicodeError, RecursionError):
+        return {**evidence, "reason": "nft-diagnostic-unsupported-or-private-shaped-content"}
+    return {**evidence, "captured": True, "parsed": document}
+
+def record_namespace_result(report, operation, out, err, code):
+    operation.update(exitCode=code, stdoutBytes=len(out), stderrBytes=len(err),
+                     stdoutSha256=hashlib.sha256(out).hexdigest(), stderrSha256=hashlib.sha256(err).hexdigest())
+    if operation["operation"] in {"nft-tables", "nft-owned-table"}:
+        # At most two bounded parsed snapshots; host interfaces/routes are never retained.
+        report.setdefault("nftDiagnosticReadbacks", {})[operation["operation"]] = nft_diagnostic(out)
+
 class CommandFailure(Refusal):
     def __init__(self, argv, code, out, err):
         self.evidence = {"command": Path(argv[0]).name, "exitCode": code,
@@ -277,14 +352,14 @@ def root_run(output):
     nonce = uuid.uuid4().hex
     report = {"schemaVersion": 1, "kind": "confinement-boundary-only", "nonce": nonce,
               "image": IMAGE, "packageCommandsExecuted": False, "fullInstallAdmitted": False,
-              "probes": [], "setupComplete": False, "finalFilterValid": False,
+              "phase": "initial-source-pins", "probes": [], "setupComplete": False, "finalFilterValid": False,
               "workloadCompleted": False, "sourcePinsPreserved": False,
               "cleanup": {"complete": False}, "failures": [],
               "limits": ["Within-run tool drift pins are not externally authenticated binary checksums.",
                          "Counter attribution uses a single owned builtin process and one outstanding network operation.",
                          "This is confinement evidence only, not a package/native/install admission."]}
     container_id = None; process = None; events = None; fd = None; started = None
-    work = None
+    work = None; trusted_refusals = ()
     try:
         output.mkdir(parents=True, exist_ok=True)
         os.chmod(output, 0o755)
@@ -299,13 +374,17 @@ def root_run(output):
         global HEAD, HOSTS, PAYLOAD_SHA, TABLE, validate_policy, verify_readback
         global apply_and_verify, unique_json, verify_tables, verify_tools
         from egress_policy import HEAD, HOSTS, PAYLOAD_SHA, TABLE, validate_policy, verify_readback
+        from egress_policy import Refusal as PolicyRefusal
         from namespace_filter import apply_and_verify, unique_json, verify_tables, verify_tools
+        trusted_refusals = (PolicyRefusal,)
         source_names = ["boundary_host.py", "boundary_contract.py", "boundary_probe.cjs", *HELPERS]
         source_pins = {name: digest(HERE / name) for name in source_names}
         report["sourcePins"] = source_pins
         report["toolBindingProgress"] = []
+        report["phase"] = "host-tool-binding"
         binding, descriptions = bind_tools(report["toolBindingProgress"])
         report["hostTools"] = descriptions
+        report["phase"] = "docker-daemon-check"
         docker_binding = canonical_elf("docker")
         docker = docker_binding["path"]
         endpoint = Path("/run/docker.sock")
@@ -322,10 +401,12 @@ def root_run(output):
             raise Refusal("Native local rootful Docker with builtin default seccomp required")
         report["docker"] = {**docker_binding, "version": dock("version", "--format", "{{.Server.Version}}")[:128],
                             "localRootfulDaemon": True, "builtinSeccomp": True}
+        report["phase"] = "image-acquisition"
         dock("pull", IMAGE, timeout=180)
         image = unique_json(dock("image", "inspect", IMAGE))[0]
         if IMAGE not in image.get("RepoDigests", []) or image.get("Os") != "linux" or image.get("Architecture") != "amd64" or image.get("Config", {}).get("Volumes"):
             raise Refusal("Exact pinned native image identity/volume contract failed")
+        report["phase"] = "endpoint-observation"
         policy = fresh_policy()
         report["endpointPolicy"] = policy
         source = (HERE / "boundary_probe.cjs").resolve()
@@ -343,6 +424,7 @@ def root_run(output):
         for key, value in expected_env.items():
             argv.extend(["--env", key + "=" + value])
         argv.extend([IMAGE, "/probe.cjs", nonce])
+        report["phase"] = "container-creation"
         container_id = dock(*argv).strip()
         if len(container_id) != 64 or any(c not in "0123456789abcdef" for c in container_id):
             raise Refusal("Invalid actual container ID")
@@ -351,22 +433,35 @@ def root_run(output):
                                    stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
                                    env=HOST_ENV, close_fds=True, start_new_session=True)
         events = Events(process)
+        report["phase"] = "container-ready"
         ready = events.receive(min(deadline, time.monotonic() + 15))
         ready_valid = validate_ready(ready, nonce, controls_sha(os.environ))
         report["ready"] = ready
+        report["phase"] = "container-inspection"
         document = unique_json(dock("inspect", container_id))[0]
         pid, gateway = validate_container(document, container_id, nonce, source, expected_env)
         fd = os.open(f"/proc/{pid}/ns/net", os.O_RDONLY | os.O_CLOEXEC)
         actual_identity(pid, nonce, fd)
         paths = verify_tools(binding)
         def namespace_command(argv, data):
+            operation = namespace_operation(argv, data, paths, fd)
+            report["lastNamespaceToolOperation"] = operation
             with tempfile.TemporaryFile() as stdout, tempfile.TemporaryFile() as stderr:
                 completed = subprocess.run(argv, input=None if data is None else data.encode(),
                                            stdout=stdout, stderr=stderr, timeout=min(5, max(0.1, deadline-time.monotonic())),
                                            check=False, pass_fds=(fd,), env=HOST_ENV)
-                if completed.returncode or stdout.tell() > MAX_OUTPUT or stderr.tell() > 65536:
+                output_bytes, error_bytes = stdout.tell(), stderr.tell()
+                if output_bytes > MAX_OUTPUT or error_bytes > 65536:
+                    operation.update(exitCode=completed.returncode, stdoutBytes=output_bytes, stderrBytes=error_bytes,
+                                     diagnosticOutputBoundExceeded=True)
                     raise Refusal("Pinned namespace command failed or exceeded bound")
-                stdout.seek(0); return stdout.read().decode("utf8", errors="strict")
+                stdout.seek(0); stderr.seek(0)
+                out, err = stdout.read(), stderr.read()
+                record_namespace_result(report, operation, out, err, completed.returncode)
+                if completed.returncode:
+                    raise Refusal("Pinned namespace command failed or exceeded bound")
+                return out.decode("utf8", errors="strict")
+        report["phase"] = "filter-install-and-readback"
         installed = apply_and_verify(policy, paths, fd, namespace_command,
                                      lambda: dt.datetime.now(dt.timezone.utc), phase_seconds=PHASE_SECONDS)
         prefix = [paths["nsenter"], "--net=/proc/self/fd/" + str(fd), "--"]
@@ -375,6 +470,7 @@ def root_run(output):
             verify_tables(tables, installed=True)
             value = unique_json(namespace_command(prefix + [paths["nft"], "-j", "-n", "list", "table", "inet", TABLE], None))
             return verify_readback(value, tuple(installed["addresses"]))["outputDropCounter"]
+        report["phase"] = "filter-gate-revalidation"
         # Rebind actual Docker/PID/pins after filter installation before gate release.
         validate_container(unique_json(dock("inspect", container_id))[0], container_id, nonce, source, expected_env)
         actual_identity(pid, nonce, fd)
@@ -382,12 +478,14 @@ def root_run(output):
         if any(digest(HERE / n) != h for n, h in source_pins.items()):
             raise Refusal("Source changed before probe gate release")
         report["filterInstall"] = installed
+        report["phase"] = "ipv6-loopback-route"
         ipv6_routes = unique_json(namespace_command(prefix + [paths["ip"], "-j", "-6", "route", "show", "table", "all"], None))
         report["ipv6LoopbackRoutePresent"] = any(row.get("dst") in {"::1", "::1/128"} and row.get("dev") == "lo" for row in ipv6_routes)
         if not report["ipv6LoopbackRoutePresent"]:
             raise Refusal("IPv6 loopback route absent; actual IPv6 denial test is inconclusive")
         report["setupComplete"] = True
         for case in probe_plan(policy["hosts"]["nodejs.org"][0], gateway):
+            report["phase"] = "network-probe:" + case["id"]
             before = counter()
             time.sleep(0.1)
             quiet = counter()
@@ -402,20 +500,25 @@ def root_run(output):
             report["probes"].append(assessed)
             if not assessed["passed"]:
                 raise Refusal("Boundary probe lacked required evidence: " + case["id"])
+        report["phase"] = "final-filter-and-identity"
         report["finalCounter"] = counter()
         actual_identity(pid, nonce, fd)
         verify_tools(binding)
         report["finalFilterValid"] = True
+        report["phase"] = "workload-completion"
         process.stdin.close()
         if events.receive(min(deadline, time.monotonic() + 5)) != {"event": "complete", "operations": 13} or process.wait(timeout=5) != 0:
             raise Refusal("Actual builtin workload did not complete exactly")
         report["workloadCompleted"] = True
+        report["phase"] = "final-source-pins"
         if any(digest(HERE / n) != h for n, h in source_pins.items()):
             raise Refusal("Frozen source changed during probe")
         report["sourcePinsPreserved"] = True
+        report["phase"] = "complete"
     except Exception as error:
         # Refusals contain fixed operation labels only; no stack, env or owner paths.
-        report["failures"].append(str(error) if isinstance(error, Refusal) else type(error).__name__)
+        report["failurePhase"] = report["phase"]
+        report["failures"].append(failure_label(error, trusted_refusals))
     finally:
         cleanup_errors = []
         if fd is not None:
