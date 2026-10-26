@@ -1,72 +1,68 @@
-# Locked host-lite compiler and production build: finite runtime candidate
+# Vite launch diagnostics: proposed finite runtime
 
-This packet has not executed. It derives from independently reviewed closed
-preparation v2, with only runtime gates, this description and a separate exact
-build admission changed. The manual owned-fork workflow and controller gates are
-open for normal review of one execution; source preparation alone does not
-publish or dispatch it. admission/build-admission.json expires at
-2026-10-26T02:31:00Z and is hash-bound in the workflow and revalidated before every
-phase and immediately before package release. The expired install admission is
-omitted. Root retains publication, dispatch, approval and result reconciliation.
+This packet adds read-only diagnostics around the original Yarn workspace build
+command. This new candidate has not run and awaits separate normal execution
+review. The manual owned-fork workflow and controller gates are enabled only for
+that review of one finite attempt. A newly created exact build admission expires
+at 2026-10-26T03:25:00Z; its SHA is bound in the workflow and checked before every
+phase and immediately before release. The previous 02:31 admission remains in
+its preserved prior candidate and is not reused or extended. Historical boundary
+and original-install proofs remain data; neither admits this execution alone.
 
-The source is upstream 0820278c1cd38e6dd6a1ae38631889041bd6f9ba with four exact
-changes: the previously qualified Snap-selection fix, TypeScript 5.0.4 pin,
-Vite ambient declaration, and the lock generated and immutable-installed by
-successful run 40251608388. The lock SHA256 is
-7e7d3d81d902cc4af88f38cf3a43eb831eeb20861d9097b23b4859f4844e4340.
-All 3,757 old lock entry bodies are unchanged; 89 descriptors were added.
+[Actual run 40256371211](https://github.com/citadelculture/pftl-snap/actions/runs/40256371211)
+at `b64678eccf02575b625bde37d0b8f5f828afc401` completed immutable install,
+compiler identity and typecheck with exit 0. The compiler guard bound the actual
+workspace TypeScript 5.0.4 package and implementation bytes. The production-build
+phase exited 128 with empty stdout and exactly `permission denied: vite` on
+stderr. Cleanup was verified. The full build remains unqualified, and the
+EACCES cause is unproven. That original result is preserved separately.
 
-Original root hooks and policies remain unchanged. The new inventory freezes the
-qualified lock. The separate build admission binds this four-file payload, while
-unchanged network helpers retain the historical boundary's original source and
-payload identity. Both historical boundary proof and successful install proof
-are hash-bound and checked; neither authorizes build execution by itself.
+The new module records metadata for eight fixed Node, shell, Yarn and Vite paths:
+lstat facts, reviewed real paths and ancestor modes, UID/GID, device/inode and
+file type. It reads `/proc/self/mountinfo` within explicit byte/line bounds and
+retains the longest covering mount's filesystem type and safe mount options.
+Host mount source/root paths, arbitrary option values and package contents are
+not emitted. Resolved paths outside reviewed roots are redacted. Missing
+`noexec` is not replaced with an assumed default.
 
-The finite phase order is immutable install, compiler identity, typecheck, then
-production build. The old runner volume was cleaned; a new owned volume needs
-an actual immutable installation. No resolution/generate phase, hook shim or
-lifecycle-policy override is included.
+Pinned Yarn 3.2.1 source constructs temporary executable shell wrappers and
+prepends their directory to script PATH. The observer therefore watches only
+canonical nonsymlink `/tmp/xfs-*` directories for `vite` metadata. It limits
+directory enumeration, watched directories, event count and retained snapshots,
+then closes its watchers. These events are best effort: an unobserved ephemeral
+shim is inconclusive. No temporary file contents are read or changed.
 
-Compiler phases run through Yarn's host-lite workspace environment:
+After the original child exits, one bounded `PFTL_BUILD_LAUNCH_DIAGNOSTIC` JSON
+line goes to stdout. Existing `*.stdout` artifact collection retains it as data;
+it is not evaluated or treated as a runtime authorization. Stderr, exit status
+and signal forwarding remain those of the original command. Diagnostic failure
+does not substitute a command or change its exit status.
 
-    node .yarn/releases/yarn-3.2.1.cjs workspace @postfiat/pftl-host-lite exec node /lane/locked-compiler.cjs compiler-identity
-    node .yarn/releases/yarn-3.2.1.cjs workspace @postfiat/pftl-host-lite exec node /lane/locked-compiler.cjs typecheck
+The original launch remains:
 
-This explicitly refines the initial exec-tsc contract to record provenance.
-The guard resolves the workspace TypeScript 5.0.4 package directly, requires its
-actual bin mapping to be {tsc: "./bin/tsc"}, and binds that package's bin/tsc.
-Yarn 3.2.1 creates regular temporary shell shims and prepends their directory to
-PATH; the guard deliberately does not select, equate or execute that shim.
-It records relative real paths and SHA256 of package.json, bin/tsc, lib/tsc.js
-and lib/typescript.js, then invokes the exact direct CLI with --version or
---noEmit --project tsconfig.json. Files are compared again after execution;
-identity and typecheck bindings must match. A printed version alone cannot pass.
-No package is imported by the provenance guard.
+    node .yarn/releases/yarn-3.2.1.cjs workspace @postfiat/pftl-host-lite build
 
-The final command invokes the unchanged workspace build script, vite build.
-It introduces real esbuild 0.21.5 executable and Rollup 4.65.0 Linux addon use.
-That native build scope is explicitly included in this separate finite admission.
-No compiler/Python provisioning or disabled-script enablement is included.
-Earlier YN0066 TypeScript compatibility-patch and peer warnings remain limits
-until actual compiler/build outcomes are available.
+There is no direct-node Vite substitute, chmod, mount change, TMPDIR override,
+inherited-control change, root-hook change or extra package execution. The
+controller pins both the diagnostic module and updated wrapper before and
+after every phase. Its other executable behavior is unchanged.
 
-The controller preserves local Docker/tool identities, genuine container HOME
-and UID 1000, empty capabilities, seccomp/no-new-privileges, inherited controls,
-credential exclusions, read-only control mounts, nonce-bound read-only namespace
-identity inspection, installed/read-back filtering, fresh per-phase endpoints,
-admission expiry rechecks immediately before atomic release, resources and owned
-cleanup. Inspector and trusted wait gate extend only explicit phase labels.
+The source remains upstream `0820278c1cd38e6dd6a1ae38631889041bd6f9ba` with the
+same qualified Snap-selection correction, host-lite TypeScript 5.0.4 pin, Vite
+ambient declaration and lock. Lock SHA256 remains
+`7e7d3d81d902cc4af88f38cf3a43eb831eeb20861d9097b23b4859f4844e4340`.
+The finite phase order, compiler provenance checks, original policies, source
+integrity checks and dist rules are unchanged.
 
-All frozen source and lock bytes and modes are checked after each phase. Only
-the final phase may create packages/host-lite/dist. Its regular nonempty files
-are bounded to 256 files, 8 MiB each, 32 MiB total, hashed and copied to evidence.
-The index must reference a local module script; each direct script/link reference
-must resolve to a retained nonempty asset within dist. Symlinks, external URLs
-and traversal are rejected. These are entry-reference and integrity checks;
-no bundle is executed and dynamic browser imports are not qualified.
+Local Docker/tool identity checks, genuine container HOME and UID 1000, empty
+capabilities, seccomp/no-new-privileges, inherited controls, credential
+exclusions, read-only control mounts, nonce-bound namespace inspection,
+installed/read-back filtering, per-phase endpoints, expiry checks, resource
+bounds and owned cleanup are unchanged. No earlier admission is modified or
+extended by this new candidate. This separately prepared finite runtime
+candidate requires normal publication and execution review before any attempt;
+the diagnostics alone authorize nothing.
 
-Next: normal review of this exact public inventory, followed by separately
-controlled publication and one manual dispatch before admission expiry. No
-publication, dispatch, compiler/build or package execution occurred in preparing
-this packet or its pure tests. Browser/provider/wallet/signing and transaction
-execution remain outside this workload.
+Source preparation and pure tests establish no new package or native execution,
+Vite build, browser/provider/wallet/signing/transaction behavior or Sharp native
+load. Any permission or mount correction must follow actual causal evidence.

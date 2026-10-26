@@ -30,14 +30,15 @@ TREE = "2d6666aba60dbd00d912034cc2d4def5200ceac9"
 IMAGE = "node@sha256:51b1100cc2a83d370c6a60952e3f2989c8a43159d0e38586e090f3b3326efefd"
 RESERVE = 4 * 1024**3
 OUTPUT_LIMIT = 16 * 1024**2
-PREPARATION_ONLY = False  # Exact finite runtime candidate; external execution still requires normal review.
-BUILD_EXECUTION_ADMITTED = True  # Separate exact build admission is required and rechecked for every release.
+PREPARATION_ONLY = False  # Proposed finite diagnostic runtime; separate normal review required.
+BUILD_EXECUTION_ADMITTED = True  # New exact finite admission is rechecked before each release.
 BUILD_HELPERS = {
     "build_contract.py": "7f075778136ac847b1c2ebfb7d5493d2968ce5edda7159e3eeaf858750579b20",
     "build_artifacts.py": "ca359319e218c1bb0a59c8cd89467641b43e5148413ecbee194490b5b1d53491",
     "compiler_identity.py": "594f95fcac4be01af7bd4b2ba5c45ce515b7298c0f8fad863f2ea9c110020df8",
     "locked-compiler.cjs": "97d155f73eb41615bd4e08b0a354d4bb2bb2df5c01d4a7eaa42b8731ae47a278",
-    "container-entry.cjs": "085dd27b498afab7510f4cfd5963764f2f57031eed1e142fd9fe97697b102a72",
+    "container-entry.cjs": "ef50415c025c0d627182cd251183317550d3c1563d3a70e1264df75b9e6be149",
+    "build-launch-diagnostics.cjs": "3645a3e660f8ac3bdd487cdfde94660c9d9db6b898370fb56960bfa1bd747be9",
     "wait-for-filter.sh": "f94b15add83674f0c3655cfce3ffe84070b52c06d9b6cb0f5826782dcaaf6b36",
     "inspect-gate-namespace.py": "70d3cdf9feae3cb274b2e1faca514736eb65db1b90b1aaa1b132782d8de16138",
     "install_contract.py": "ba3504d81e4dc9aec20fc98a318191af0be374a07cf23051dd79ef46fd77b58c",

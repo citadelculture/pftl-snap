@@ -41,8 +41,18 @@ assert.equal(cp.execFileSync('/lane-bin/yarn', ['--version'], { cwd: '/work/proj
     'production-build': ['workspace', '@postfiat/pftl-host-lite', 'build'],
   };
   const args = [yarn, ...commands[phase]];
+  let diagnostics = null;
+  if (phase === 'production-build') {
+    try {
+      diagnostics = require('/lane/build-launch-diagnostics.cjs').begin(
+        text => process.stdout.write('PFTL_BUILD_LAUNCH_DIAGNOSTIC ' + text + '\n'));
+    } catch (_) { /* Diagnostic failure must not change the original command or exit. */ }
+  }
+  const finishDiagnostics = (code, signal) => {
+    try { if (diagnostics) diagnostics.finish(code, signal); } catch (_) { /* Preserve original exit. */ }
+  };
   const child = cp.spawn('/usr/local/bin/node', args, { cwd: '/work/project', env: childEnv, stdio: 'inherit' });
   for (const signal of ['SIGTERM', 'SIGINT']) process.on(signal, () => child.kill(signal));
-  child.on('error', () => { process.exitCode = 1; });
-  child.on('exit', (code, signal) => { process.exitCode = signal ? 1 : (code ?? 1); });
+  child.on('error', () => { finishDiagnostics(null, 'spawn-error'); process.exitCode = 1; });
+  child.on('exit', (code, signal) => { finishDiagnostics(code, signal); process.exitCode = signal ? 1 : (code ?? 1); });
 }
