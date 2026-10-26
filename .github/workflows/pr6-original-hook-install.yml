@@ -50,7 +50,7 @@ jobs:
           --source "$GITHUB_WORKSPACE/upstream"
           --outputs "$GITHUB_WORKSPACE/pr6-install-evidence"
           --admission "$GITHUB_WORKSPACE/control/qualification/pr6-lock/admission/full-install-admission.json"
-          --admission-sha256 e5b423da6afe1e7ae23a5469835346f151cca6c111205ce4903267a6072a9f00
+          --admission-sha256 0727db2daea18cfd04d9bd98481ba2b163b7fc126c7906fd8bfc288f2e45e383
           --boundary-report "$GITHUB_WORKSPACE/control/qualification/pr6-lock/admission/boundary-report.json"
           --boundary-provenance "$GITHUB_WORKSPACE/control/qualification/pr6-lock/admission/boundary-provenance.json"
       - name: Preserve requested install evidence
